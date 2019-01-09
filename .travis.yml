@@ -30,10 +30,10 @@ before_install:
       sudo apt-get install -y git libboost-python-dev libboost-system-dev;
     fi
 before_script:
-  - if [[ $"BUILD_NODEJS_LIB" == "ON" ]]; then npm install; fi
+  - if [[ "$BUILD_NODEJS_LIB" == "ON" ]]; then npm install; fi
   - mkdir build
   - cd build
-  - cmake ../src
+  - cmake -DBUILD_CXX_LIB=${BUILD_CXX_LIB} -DBUILD_NODEJS_LIB=${BUILD_NODEJS_LIB} -DBUILD_PYTHON_LIB=${BUILD_PYTHON_LIB} -DPYTHON_LIBRARY=${PYTHON_LIBRARY} -DPYTHON_INCLUDE_DIR=${PYTHON_INCLUDE_DIR} ../src
 script: 
   - make
 
