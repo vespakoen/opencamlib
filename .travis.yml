@@ -18,11 +18,11 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
       if [[ "$PYTHONV" == "2" ]]; then
         brew install boost-python;
+        export PYTHON_LIBRARY=$(python-config --prefix)/lib/libpython2.7.dylib;
+        export PYTHON_INCLUDE_DIR=$(python-config --prefix)/include/python2.7;
       else
-        brew install python boost-python@3;
+        brew install python boost-python3;
       fi;
-      export PYTHON_LIBRARY=$(python-config --prefix)/lib/libpython2.7.dylib;
-      export PYTHON_INCLUDE_DIR=$(python-config --prefix)/include/python2.7;
       export CMAKE_FIND_FRAMEWORK=LAST;
       export CMAKE_VERBOSE_MAKEFILE=ON;
     else
@@ -33,7 +33,16 @@ before_script:
   - if [[ "$BUILD_NODEJS_LIB" == "ON" ]]; then npm install; fi
   - mkdir build
   - cd build
-  - cmake -DBUILD_CXX_LIB=${BUILD_CXX_LIB} -DBUILD_NODEJS_LIB=${BUILD_NODEJS_LIB} -DBUILD_PYTHON_LIB=${BUILD_PYTHON_LIB} -DPYTHON_LIBRARY=${PYTHON_LIBRARY} -DPYTHON_INCLUDE_DIR=${PYTHON_INCLUDE_DIR} ../src
+  - echo $BUILD_CXX_LIB
+  - echo $BUILD_NODEJS_LIB
+  - echo $BUILD_PYTHON_LIB
+  - cmake
+      -DBUILD_CXX_LIB="$BUILD_CXX_LIB"
+      -DBUILD_NODEJS_LIB="$BUILD_NODEJS_LIB"
+      -DBUILD_PYTHON_LIB="$BUILD_PYTHON_LIB"
+      -DPYTHON_LIBRARY="$PYTHON_LIBRARY"
+      -DPYTHON_INCLUDE_DIR="$PYTHON_INCLUDE_DIR"
+      ../src
 script: 
   - make
 
