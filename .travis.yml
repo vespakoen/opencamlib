@@ -1,6 +1,7 @@
 os:
   - linux
   - osx
+  - windows
 
 language: c++
 
@@ -36,13 +37,21 @@ before_script:
   - echo $BUILD_CXX_LIB
   - echo $BUILD_NODEJS_LIB
   - echo $BUILD_PYTHON_LIB
-  - cmake
-      -DBUILD_CXX_LIB="$BUILD_CXX_LIB"
-      -DBUILD_NODEJS_LIB="$BUILD_NODEJS_LIB"
-      -DBUILD_PYTHON_LIB="$BUILD_PYTHON_LIB"
-      -DPYTHON_LIBRARY="$PYTHON_LIBRARY"
-      -DPYTHON_INCLUDE_DIR="$PYTHON_INCLUDE_DIR"
-      ../src
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      cmake
+        -DBUILD_CXX_LIB="$BUILD_CXX_LIB"
+        -DBUILD_NODEJS_LIB="$BUILD_NODEJS_LIB"
+        -DBUILD_PYTHON_LIB="$BUILD_PYTHON_LIB"
+        -DPYTHON_LIBRARY="$PYTHON_LIBRARY"
+        -DPYTHON_INCLUDE_DIR="$PYTHON_INCLUDE_DIR"
+        ../src;
+    else
+      cmake
+        -DBUILD_CXX_LIB="$BUILD_CXX_LIB"
+        -DBUILD_NODEJS_LIB="$BUILD_NODEJS_LIB"
+        -DBUILD_PYTHON_LIB="$BUILD_PYTHON_LIB"
+        ../src;
+    fi
 script: 
   - make
 
