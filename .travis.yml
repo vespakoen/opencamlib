@@ -19,12 +19,12 @@ before_install:
       if [[ "$PYTHONV" == "2" ]]; then
         brew install boost-python;
       else
-        brew install python boost-python@3
-      fi
-      export PYTHON_LIBRARY=$(python-config --prefix)/lib/libpython2.7.dylib
-      export PYTHON_INCLUDE_DIR=$(python-config --prefix)/include/python2.7
-      export CMAKE_FIND_FRAMEWORK=LAST
-      export CMAKE_VERBOSE_MAKEFILE=ON
+        brew install python boost-python@3;
+      fi;
+      export PYTHON_LIBRARY=$(python-config --prefix)/lib/libpython2.7.dylib;
+      export PYTHON_INCLUDE_DIR=$(python-config --prefix)/include/python2.7;
+      export CMAKE_FIND_FRAMEWORK=LAST;
+      export CMAKE_VERBOSE_MAKEFILE=ON;
     else
       sudo apt-get update;
       sudo apt-get install -y git libboost-python-dev libboost-system-dev;
