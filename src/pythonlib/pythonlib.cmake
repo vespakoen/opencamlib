@@ -130,11 +130,21 @@ target_link_libraries(
 
 message(STATUS "linking python binary ocl.so with boost: " ${Boost_PYTHON_LIBRARY})
 
-# this makes the lib name ocl.so and not libocl.so
-set_target_properties(ocl PROPERTIES PREFIX "") 
-# if (WIN32)
-# set_target_properties(ocl PROPERTIES VERSION ${MY_VERSION})
-# endif (WIN32)
+if(USE_PY_3)
+  set(PYTHON_LIB_VERSION_POSTFIX "${Python3_VERSION_MAJOR}${Python3_VERSION_MINOR}")
+else()
+  set(PYTHON_LIB_VERSION_POSTFIX "${Python2_VERSION_MAJOR}${Python2_VERSION_MINOR}")
+endif()
+
+if(WIN32)
+  set(PYTHON_LIB_POSTFIX ".${PYTHON_LIB_VERSION_POSTFIX}.win32.so")
+elseif(APPLE)
+  set(PYTHON_LIB_POSTFIX ".${PYTHON_LIB_VERSION_POSTFIX}.darwin.so")
+else()
+  set(PYTHON_LIB_POSTFIX ".${PYTHON_LIB_VERSION_POSTFIX}.linux.so")
+endif()
+
+set_target_properties(ocl PROPERTIES PREFIX "" SUFFIX ${PYTHON_LIB_POSTFIX})
 
 install(
   TARGETS ocl
