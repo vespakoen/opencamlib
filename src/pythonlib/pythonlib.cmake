@@ -130,21 +130,23 @@ target_link_libraries(
 
 message(STATUS "linking python binary ocl.so with boost: " ${Boost_PYTHON_LIBRARY})
 
-if(USE_PY_3)
-  set(PYTHON_LIB_VERSION_POSTFIX "${Python3_VERSION_MAJOR}${Python3_VERSION_MINOR}")
+if(USE_VERSION_AND_PLATFORM_SUFFIX)
+  if(USE_PY_3)
+    set(PYTHON_LIB_VERSION_POSTFIX "${Python3_VERSION_MAJOR}${Python3_VERSION_MINOR}")
+  else()
+    set(PYTHON_LIB_VERSION_POSTFIX "${Python2_VERSION_MAJOR}${Python2_VERSION_MINOR}")
+  endif()
+  if(WIN32)
+    set(PYTHON_LIB_POSTFIX ".${PYTHON_LIB_VERSION_POSTFIX}.win64.so")
+  elseif(APPLE)
+    set(PYTHON_LIB_POSTFIX ".${PYTHON_LIB_VERSION_POSTFIX}.darwin.so")
+  else()
+    set(PYTHON_LIB_POSTFIX ".${PYTHON_LIB_VERSION_POSTFIX}.linux.so")
+  endif()
+  set_target_properties(ocl PROPERTIES PREFIX "" SUFFIX ${PYTHON_LIB_POSTFIX})
 else()
-  set(PYTHON_LIB_VERSION_POSTFIX "${Python2_VERSION_MAJOR}${Python2_VERSION_MINOR}")
+  set_target_properties(ocl PROPERTIES PREFIX "")
 endif()
-
-if(WIN32)
-  set(PYTHON_LIB_POSTFIX ".${PYTHON_LIB_VERSION_POSTFIX}.win64.so")
-elseif(APPLE)
-  set(PYTHON_LIB_POSTFIX ".${PYTHON_LIB_VERSION_POSTFIX}.darwin.so")
-else()
-  set(PYTHON_LIB_POSTFIX ".${PYTHON_LIB_VERSION_POSTFIX}.linux.so")
-endif()
-
-set_target_properties(ocl PROPERTIES PREFIX "" SUFFIX ${PYTHON_LIB_POSTFIX})
 
 install(
   TARGETS ocl
