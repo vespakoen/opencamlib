@@ -48,8 +48,8 @@ Waterline::Waterline() {
     nthreads=1;
 #ifdef _OPENMP
     nthreads = omp_get_num_procs(); 
-    //omp_set_dynamic(0);
-    omp_set_nested(1);
+    // omp_set_dynamic(0);
+    // omp_set_nested(1);
 #endif
 
 }
