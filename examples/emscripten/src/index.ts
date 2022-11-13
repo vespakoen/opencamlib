@@ -1,5 +1,4 @@
-const fs = require('fs')
-const {
+import {
   Waterline,
   AdaptiveWaterline,
   PathDropCutter,
@@ -10,7 +9,7 @@ const {
   Path,
   Point,
   Line
-} = require('opencamlib')
+} from 'opencamlib/browser'
 
 async function waterline(surface, cutter, z, sampling) {
   const wl = new Waterline()
@@ -20,7 +19,7 @@ async function waterline(surface, cutter, z, sampling) {
   wl.setSampling(sampling)
   wl.run()
   let gcode = ''
-  const loops = wl.getLoops()
+  const loops = await wl.getLoops()
   for (var i = 0; i < loops.length; i++) {
     const loop = loops[i];
     for (var j = 0; j < loop.length; j++) {
@@ -41,7 +40,7 @@ async function adaptiveWaterline(surface, cutter, z, sampling, minSampling) {
   awl.setMinSampling(minSampling)
   awl.run()
   let gcode = ''
-  const loops = awl.getLoops()
+  const loops = await awl.getLoops()
   for (var i = 0; i < loops.length; i++) {
     const loop = loops[i]
     for (var j = 0; j < loop.length; j++) {
@@ -60,7 +59,7 @@ async function pathDropCutter(surface, cutter, sampling, path) {
   pdc.setPath(path)
   pdc.setSampling(sampling)
   pdc.run()
-  const points = pdc.getCLPoints()
+  const points = await pdc.getPoints()
   let gcode = ''
   for (var j = 0; j < points.length; j++) {
     const point = points[j]
@@ -78,7 +77,7 @@ async function adaptivePathDropCutter(surface, cutter, sampling, minSampling, pa
   apdc.setSampling(sampling)
   apdc.setMinSampling(minSampling)
   apdc.run()
-  const points = apdc.getCLPoints()
+  const points = await apdc.getPoints()
   let gcode = ''
   for (var j = 0; j < points.length; j++) {
     const point = points[j]
@@ -87,9 +86,11 @@ async function adaptivePathDropCutter(surface, cutter, sampling, minSampling, pa
   console.log(gcode)
 }
 
-async function main() {
+
+fetch('gnu_tux_mod.stl')
+  .then(res => res.text())
+  .then(async (stlContents) => {
     const surface = new STLSurf()
-    const stlContents = fs.readFileSync(__dirname + '/../../stl/gnu_tux_mod.stl') 
     new STLReader(stlContents, surface)
     const cutter = new CylCutter(4, 20)
     await waterline(surface, cutter, 1, 0.1)
@@ -101,6 +102,40 @@ async function main() {
     path.append(l)
     await pathDropCutter(surface, cutter, 0.1, path)
     await adaptivePathDropCutter(surface, cutter, 0.04, 0.01, path)
-}
+})
 
-main()
+// import '@kitware/vtk.js/Rendering/Profiles/Geometry';
+// import vtkActor from '@kitware/vtk.js/Rendering/Core/Actor';
+// import vtkConeSource from '@kitware/vtk.js/Filters/Sources/ConeSource';
+// import vtkMapper from '@kitware/vtk.js/Rendering/Core/Mapper';
+// import vtkOpenGLRenderWindow from '@kitware/vtk.js/Rendering/OpenGL/RenderWindow';
+// import vtkRenderWindow from '@kitware/vtk.js/Rendering/Core/RenderWindow';
+// import vtkRenderWindowInteractor from '@kitware/vtk.js/Rendering/Core/RenderWindowInteractor';
+// import vtkRenderer from '@kitware/vtk.js/Rendering/Core/Renderer';
+// import vtkInteractorStyleTrackballCamera from '@kitware/vtk.js/Interaction/Style/InteractorStyleTrackballCamera';
+
+// const renderWindow = vtkRenderWindow.newInstance();
+// const renderer = vtkRenderer.newInstance({ background: [0, 0, 0] });
+// renderWindow.addRenderer(renderer);
+
+// const coneSource = vtkConeSource.newInstance({ height: 1.0 });
+// const mapper = vtkMapper.newInstance();
+// mapper.setInputConnection(coneSource.getOutputPort());
+
+// const actor = vtkActor.newInstance();
+// actor.setMapper(mapper);
+// renderer.addActor(actor);
+// renderer.resetCamera();
+// const openglRenderWindow = vtkOpenGLRenderWindow.newInstance();
+// renderWindow.addView(openglRenderWindow);
+// const container = document.createElement('div');
+// document.querySelector('body')!.appendChild(container);
+// openglRenderWindow.setContainer(container);
+// const { width, height } = container.getBoundingClientRect();
+// openglRenderWindow.setSize(width, height);
+// const interactor = vtkRenderWindowInteractor.newInstance();
+// interactor.setView(openglRenderWindow);
+// interactor.initialize();
+// interactor.bindEvents(container);
+// interactor.setInteractorStyle(vtkInteractorStyleTrackballCamera.newInstance());
+
