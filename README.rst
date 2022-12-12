@@ -268,7 +268,7 @@ First, download and extract Boost:
 
 ..  code-block:: shell
 
-    wget -nv -O boost_1_80_0.tar.gz https://boostorg.jfrog.io/artifactory/main/release/1.80.0/source/boost_1_80_0.tar.gz
+    curl "https://boostorg.jfrog.io/artifactory/main/release/1.80.0/source/boost_1_80_0.tar.gz" --output "boost_1_80_0.tar.gz" --location
     tar -zxf boost_1_80_0.tar.gz -C /tmp/boost
     cd /tmp/boost/boost_1_80_0
 
@@ -324,7 +324,7 @@ Now, when compiling the C++ or node.js module, add the
 
 ``-D BOOST_ROOT=/path/to/extracted/boost`` flag to the ``cmake ..`` command, or the.
 
-``--boost-prefix /path/to/extracted/boost`` flag to the ``./scripts/build-${PLATFORM}.sh`` command
+``--boost-prefix /path/to/extracted/boost`` flag to the ``./install.sh`` command
 
 **You installed Boost from Github.**
 
@@ -340,6 +340,37 @@ The boost that is hosted on Github does not have the headers yet! To compile tho
 The CMake module that looks for Boost, is usually not aware of the existence of the latest Boost versions.
 You can help it by providing the version number of your Boost with the ``-D Boost_ADDITIONAL_VERSIONS="1.80.0"`` flag.
 Make sure to change 1.80.0 with your version of Boost.
+
+It can also be helpfull to enable ``Boost_DEBUG`` in the CMake configuration.
+
+***************
+Cross Compiling
+***************
+
+You can use the ``./install.sh --docker-image`` flag to run the install command in a docker container.
+This is useful if you want to compile the C++ library with support for older linux versions.
+On macOS and Windows, cross compiling is possible by using XCode or Visual Studio / MSBuild.
+
+===
+C++
+===
+
+When cross compiling the C++ library, make sure to use an old libc, this is included in the dockcross docker images.
+For a list of supported architectures, take a look at:
+
+https://github.com/dockcross/dockcross#summary-cross-compilers
+
+=======
+Node.js
+=======
+
+https://github.com/prebuild/docker-images
+
+======
+Python
+======
+
+https://github.com/pypa/manylinux#manylinux2014-centos-7-based
 
 *****
 Links
