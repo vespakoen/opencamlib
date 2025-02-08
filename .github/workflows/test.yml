@@ -168,7 +168,7 @@ jobs:
           # cmake --install build --prefix $(pwd)/../lib/boost
           # cd ..
 
-          cmake -D BUILD_PY_LIB=ON -S . -B build
+          cmake -DPython3_ROOT_DIR="${Python3_ROOT_DIR}" -D BUILD_PY_LIB=ON -S . -B build
           cmake --build build --parallel 4
           cmake --install build
           cd examples/python
