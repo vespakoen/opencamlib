@@ -49,7 +49,7 @@ jobs:
             cd boost-1.87.0
             cmake -D BOOST_INCLUDE_LIBRARIES="regex" -S . -B build
             cmake --build build --parallel 4
-            cmake --install build --prefix /c/boost
+            cmake --install build --config Debug --prefix /c/boost
             cd ..
           fi
 
@@ -161,7 +161,7 @@ jobs:
             cd boost-1.87.0
             cmake -D BOOST_INCLUDE_LIBRARIES="python" -DBOOST_ENABLE_PYTHON="ON" -S . -B build
             cmake --build build --parallel 4
-            cmake --install build --prefix /c/boost
+            cmake --install build --config Debug --prefix /c/boost
             cd ..
           fi
 
