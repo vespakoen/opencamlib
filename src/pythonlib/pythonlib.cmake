@@ -41,6 +41,7 @@ PRIVATE
   ocl_cutters
   ocl_geo
   ocl_algo
+  Boost::boost
   Boost::python${Python3_VERSION_MAJOR}${Python3_VERSION_MINOR}
 )
 

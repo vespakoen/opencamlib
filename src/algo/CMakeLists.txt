@@ -21,3 +21,4 @@ add_library(
   STATIC
   ${OCL_ALGO_SRC}
   )
+target_link_libraries(ocl_algo PUBLIC Boost::boost)

@@ -22,3 +22,4 @@ add_library(
     STATIC
     ${OCL_GEO_SRC}
 )
+target_link_libraries(ocl_geo PUBLIC Boost::boost)

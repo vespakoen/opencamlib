@@ -27,7 +27,7 @@ add_executable(ocl
 
 target_link_libraries(
   ocl
-  ${Boost_LIBRARIES}
+  Boost::boost
 )
 
 set_target_properties(ocl PROPERTIES LINK_FLAGS "\
