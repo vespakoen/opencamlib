@@ -44,7 +44,7 @@ jobs:
           cmake --install build --prefix $(pwd)/../lib/boost
           cd ..
 
-          cmake -DBoost_DIR="$(pwd)/lib/boost" -S . -B build
+          cmake -DCMAKE_PREFIX_PATH="$(pwd)/lib/boost" -S . -B build
           cmake --build build --parallel 4
           cmake --install build --prefix $(pwd)/lib/ocl
           cd examples/cpp/test
@@ -144,7 +144,7 @@ jobs:
           cmake --install build --prefix $(pwd)/../lib/boost
           cd ..
 
-          cmake -DBoost_DIR="$(pwd)/lib/boost" -DBUILD_PY_LIB=ON -S . -B build
+          cmake -DCMAKE_PREFIX_PATH="$(pwd)/lib/boost" -DBUILD_PY_LIB=ON -S . -B build
           cmake --build build --parallel 4
           cmake --install build
           cd examples/python
