@@ -122,7 +122,20 @@ jobs:
         shell: bash
         run: |
           python3 -m venv venv
-          source venv/bin/activate
+          if [ "${{ matrix.os_short }}" == "windows" ]; then
+            source venv/Scripts/activate
+          else
+            source venv/bin/activate
+          fi
+
+          curl -L -O https://github.com/boostorg/boost/releases/download/boost-1.87.0/boost-1.87.0-cmake.zip
+          unzip boost-1.87.0-cmake.zip
+          cd boost-1.87.0-cmake
+          cmake -DBOOST_INCLUDE_LIBRARIES="python" -DBOOST_ENABLE_PYTHON="ON" -S . -B build
+          cmake --build build --parallel 4
+          cmake --install build
+          cd ..
+
           cmake -DBUILD_PY_LIB=ON -S . -B build
           cmake --build build --parallel 4
           cmake --install build
