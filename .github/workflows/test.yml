@@ -175,7 +175,7 @@ jobs:
             export IS_WINDOWS=1
           fi
           cmake \
-            -G Unix Makefiles \
+            -G "Unix Makefiles" \
             -D CMAKE_BUILD_TYPE=Release \
             -D BUILD_PY_LIB=ON \
             -S . -B build
