@@ -49,7 +49,7 @@ jobs:
             cd boost-1.87.0
             cmake -D BOOST_INCLUDE_LIBRARIES="regex" -S . -B build
             cmake --build build --parallel 4
-            cmake --install build --prefix /c/local/boost_1_87_0
+            cmake --install build --prefix /c/boost
             cd ..
           fi
 
@@ -68,17 +68,6 @@ jobs:
           cmake --build build --parallel 4
           cd ./build
           ./test_example
-    #       # if [ "${{ matrix.os_short }}" == "linux" ]; then
-    #       #   export OCL_SUDO_INSTALL="1"
-    #       # fi
-    #       # ./install.sh \
-    #       #   --install-ci-deps \
-    #       #   --build-library cxx \
-    #       #   --build-type release \
-    #       #   --install-boost \
-    #       #   --boost-prefix $(pwd) \
-    #       #   --install \
-    #       #   --test
   # nodejs:
   #   name: ${{ matrix.os_short }} node.js
   #   runs-on: ${{ matrix.os }}
@@ -166,10 +155,9 @@ jobs:
             cd boost-1.87.0
             cmake -D BOOST_INCLUDE_LIBRARIES="python" -DBOOST_ENABLE_PYTHON="ON" -S . -B build
             cmake --build build --parallel 4
-            cmake --install build --prefix /c/local/boost_1_87_0
+            cmake --install build --prefix /c/boost
             cd ..
           fi
-
 
           cmake \
             -D CMAKE_BUILD_TYPE=Release \
@@ -181,20 +169,3 @@ jobs:
           cd examples/python
           which python
           python test.py
-
-          # if [ "${{ matrix.os_short }}" == "linux" ]; then
-          #   export OCL_INSTALL_BOOST="1"
-          #   export OCL_BOOST_WITH_PYTHON="1"
-          #   export OCL_BOOST_PREFIX="$(pwd)"
-          # else
-          #   export OCL_INSTALL_BOOST_FROM_REPO="1"
-          # fi
-          # ./install.sh \
-          #   --build-library python \
-          #   --build-type release \
-          #   --install-system-deps \
-          #   --python-executable python \
-          #   --python-pip-install \
-          #   --test
-        # env:
-        #   CMAKE_GENERATOR: ${{ matrix.cmake_generator }}
