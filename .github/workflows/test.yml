@@ -141,7 +141,7 @@ jobs:
       - name: Install
         shell: bash
         run: |
-          python3 -m venv venv
+          python -m venv venv
           if [ "${{ matrix.os_short }}" == "windows" ]; then
             source venv/Scripts/activate
           else
@@ -171,7 +171,7 @@ jobs:
           cmake --build build --parallel 4
           cmake --install build
           cd examples/python
-          python3 test.py
+          python test.py
 
           # if [ "${{ matrix.os_short }}" == "linux" ]; then
           #   export OCL_INSTALL_BOOST="1"
