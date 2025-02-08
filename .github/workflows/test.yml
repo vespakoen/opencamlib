@@ -55,12 +55,18 @@ jobs:
           # cmake --install build --prefix $(pwd)/../lib/boost
           # cd ..
 
-          cmake -D BUILD_CXX_LIB="ON" -S . -B build
+          cmake \
+            -D CMAKE_BUILD_TYPE=Release \
+            -D BUILD_CXX_LIB="ON" \
+            -S . -B build
           cmake --build build --parallel 4
           cmake --install build --prefix $(pwd)/lib/ocl
 
           cd examples/cpp/test
-          cmake -D CMAKE_PREFIX_PATH="$(pwd)/../../../lib/ocl" -S . -B build
+          cmake \
+            -D CMAKE_BUILD_TYPE=Release \
+            -D CMAKE_PREFIX_PATH="$(pwd)/../../../lib/ocl" \
+            -S . -B build
           cmake --build build --parallel 4
           cd ./build
           ./test_example
@@ -163,12 +169,16 @@ jobs:
           # curl -L -O https://github.com/boostorg/boost/releases/download/boost-1.87.0/boost-1.87.0-cmake.tar.gz
           # tar -xzf boost-1.87.0-cmake.tar.gz
           # cd boost-1.87.0
-          # cmake -DBOOST_INCLUDE_LIBRARIES="python" -DBOOST_ENABLE_PYTHON="ON" -S . -B build
+          # cmake  -DBOOST_INCLUDE_LIBRARIES="python" -DBOOST_ENABLE_PYTHON="ON" -S . -B build
           # cmake --build build --parallel 4
           # cmake --install build --prefix $(pwd)/../lib/boost
           # cd ..
 
-          cmake -DPython3_ROOT_DIR="${Python3_ROOT_DIR}" -D BUILD_PY_LIB=ON -S . -B build
+          cmake \
+            -D CMAKE_BUILD_TYPE=Release \
+            -D Python3_ROOT_DIR="${Python3_ROOT_DIR}" \
+            -D BUILD_PY_LIB=ON \
+            -S . -B build
           cmake --build build --parallel 4
           cmake --install build
           cd examples/python

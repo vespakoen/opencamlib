@@ -154,13 +154,13 @@ int main()
   cutters.push_back(&bullCutter);
   cutters.push_back(&coneCutter);
   double z = 0.5;
-  double sampling = 0.1;
+  double sampling = 2.0;
   for (auto cutter : cutters)
   {
     std::cout << "WL + Cutter: " << cutter->str() << "\n";
     waterline(surface, cutter, z, sampling);
   }
-  double minSampling = 0.01;
+  double minSampling = 2.0;
   for (auto cutter : cutters)
   {
     std::cout << "AWL + Cutter: " << cutter->str() << "\n";
