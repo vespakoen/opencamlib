@@ -159,9 +159,12 @@ jobs:
             cd ..
           fi
 
+          if [ "${{ matrix.os_short }}" == "windows" ]; then
+            export IS_WINDOWS=1
+          fi
           cmake \
             -D CMAKE_BUILD_TYPE=Release \
-            -D Python3_ROOT_DIR="${Python3_ROOT_DIR}" \
+            ${IS_WINDOWS:+"-D CMAKE_PREFIX_PATH=/c/boost"} \
             -D BUILD_PY_LIB=ON \
             -S . -B build
           cmake --build build --parallel 4
