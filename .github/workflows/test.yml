@@ -171,7 +171,7 @@ jobs:
           cmake --build build --parallel 4
           cmake --install build
           cd examples/python
-          python test.py
+          python3 test.py
 
           # if [ "${{ matrix.os_short }}" == "linux" ]; then
           #   export OCL_INSTALL_BOOST="1"
