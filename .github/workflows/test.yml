@@ -163,7 +163,9 @@ jobs:
             brew install libomp boost-python3
           fi
           if [ "${{ matrix.os_short }}" == "windows" ]; then
-            choco install boost-msvc-14.3
+            # choco install boost-msvc-14.3
+            curl -L -O https://github.com/userdocs/boost/releases/download/boost-1.87.0/boost_1_87_0-msvc-14.3-64.exe
+            ./boost_1_87_0-msvc-14.3-64.exe /VERYSILENT
           fi
 
           # curl -L -O https://github.com/boostorg/boost/releases/download/boost-1.87.0/boost-1.87.0-cmake.tar.gz
@@ -182,6 +184,7 @@ jobs:
           cmake --build build --parallel 4
           cmake --install build
           cd examples/python
+          which python
           python test.py
 
           # if [ "${{ matrix.os_short }}" == "linux" ]; then
