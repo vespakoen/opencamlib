@@ -37,7 +37,7 @@ jobs:
         shell: bash
         run: |
           cmake -S . -B build
-          cmake --build --parallel 4 build
+          cmake --build build --parallel 4
           cmake --install build
           cd examples/cpp/test
           cmake -S . -B build
@@ -124,7 +124,7 @@ jobs:
           python3 -m venv venv
           source venv/bin/activate
           cmake -DBUILD_PY_LIB=ON -S . -B build
-          cmake --build --parallel 4 build
+          cmake --build build --parallel 4
           cmake --install build
           cd examples/python
           python test.py
