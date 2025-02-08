@@ -61,7 +61,7 @@ jobs:
 
           cd examples/cpp/test
           cmake -D CMAKE_PREFIX_PATH="$(pwd)/../../../lib/ocl" -S . -B build
-          cmake --build --parallel 4 build
+          cmake --build build --parallel 4
           ./build/test_example
     #       # if [ "${{ matrix.os_short }}" == "linux" ]; then
     #       #   export OCL_SUDO_INSTALL="1"
