@@ -48,9 +48,19 @@ jobs:
             curl -L -O https://github.com/boostorg/boost/releases/download/boost-1.87.0/boost-1.87.0-cmake.tar.gz
             tar -xzf boost-1.87.0-cmake.tar.gz
             cd boost-1.87.0
-            cmake -D BOOST_INCLUDE_LIBRARIES="math;foreach;graph" -S . -B build
-            cmake --build build --parallel 4
-            cmake --install build --config Debug --prefix /c/boost
+            cmake \
+              -D CMAKE_BUILD_TYPE=Release \
+              -D BOOST_INCLUDE_LIBRARIES="math;foreach;graph" \
+              -S . \
+              -B build
+            cmake \
+              --build build \
+              --config Release \
+              --parallel 4
+            cmake \
+              --install build \
+              --config Release \
+              --prefix "/c/Program Files (x86)/Boost"
             cd ..
           fi
 
@@ -61,18 +71,21 @@ jobs:
           cmake \
             -D CMAKE_BUILD_TYPE=Release \
             -D BUILD_CXX_LIB="ON" \
-            -D Boost_ADDITIONAL_VERSIONS="1.87.0" \
-            ${IS_WINDOWS:+"-D CMAKE_PREFIX_PATH=C:\\boost"} \
-            -S . -B build
-          cmake --build build --parallel 4
-          cmake --install build --prefix $(pwd)/lib/ocl
+            -S . \
+            -B build
+          cmake --build build --config Release --parallel 4
+          cmake --install build --config Release --prefix $(pwd)/lib/ocl
 
           cd examples/cpp/test
           cmake \
             -D CMAKE_BUILD_TYPE=Release \
             -D CMAKE_PREFIX_PATH="$(pwd)/../../../lib/ocl" \
-            -S . -B build
-          cmake --build build --parallel 4
+            -S . \
+            -B build
+          cmake \
+            --build build \
+            --config Release \
+            --parallel 4
           cd ./build
           ./test_example
   # nodejs:
@@ -165,9 +178,16 @@ jobs:
               -D CMAKE_BUILD_TYPE=Release \
               -D BOOST_INCLUDE_LIBRARIES="python;math;foreach;graph" \
               -D BOOST_ENABLE_PYTHON="ON" \
-              -S . -B build
-            cmake --build build --config Release --parallel 4
-            cmake --install build --config Release --prefix "/c/Program Files (x86)/Boost"
+              -S . \
+              -B build
+            cmake \
+              --build build \
+              --config Release \
+              --parallel 4
+            cmake \
+              --install build \
+              --config Release \
+              --prefix "/c/Program Files (x86)/Boost"
             cd ..
           fi
 
@@ -175,12 +195,17 @@ jobs:
             export IS_WINDOWS=1
           fi
           cmake \
-            -G "Unix Makefiles" \
             -D CMAKE_BUILD_TYPE=Release \
             -D BUILD_PY_LIB=ON \
-            -S . -B build
-          cmake --build build --config Release --parallel 4
-          cmake --install build --config Release
+            -S . \
+            -B build
+          cmake \
+            --build build \
+            --config Release \
+            --parallel 4
+          cmake \
+            --install build \
+            --config Release
           cd examples/python
           which python
           python test.py
