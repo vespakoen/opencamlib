@@ -35,12 +35,12 @@ jobs:
       - name: Install
         shell: bash
         run: |
-          cmake -S . -B build -G Ninja
-          cmake --build build
+          cmake -S . -B build
+          cmake --build --parallel 4 build
           cmake --install build
           cd examples/cpp/test
-          cmake -S . -B build -G Ninja
-          cmake --build build
+          cmake -S . -B build
+          cmake --build --parallel 4 build
           ./build/test_example
     #       # if [ "${{ matrix.os_short }}" == "linux" ]; then
     #       #   export OCL_SUDO_INSTALL="1"
@@ -122,8 +122,8 @@ jobs:
         run: |
           python3 -m venv venv
           source venv/bin/activate
-          cmake -DBUILD_PY_LIB=ON -S . -B build -G ninja
-          cmake --build build
+          cmake -DBUILD_PY_LIB=ON -S . -B build
+          cmake --build --parallel 4 build
           cmake --install build
           cd examples/python
           python test.py
