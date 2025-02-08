@@ -123,13 +123,13 @@ jobs:
         include:
           - os: "windows-2022"
             os_short: "windows"
-            python_version: "3.13"
+            python_version: "3.10"
           - os: "macos-15"
             os_short: "macos"
             python_version: "3.13"
           - os: "ubuntu-22.04"
             os_short: "linux"
-            python_version: "3.13"
+            python_version: "3.10"
             cmake_generator: "Unix Makefiles"
     steps:
       - uses: actions/checkout@v3
@@ -150,7 +150,7 @@ jobs:
 
           if [ "${{ matrix.os_short }}" == "linux" ]; then
             sudo apt-get update
-            sudo apt-get install -y libomp-dev libboost-dev libboost-python-dev
+            sudo apt-get install -y libomp-dev libboost-dev libboost-python1.83.0-dev
           fi
           if [ "${{ matrix.os_short }}" == "macos" ]; then
             brew install libomp boost-python3
