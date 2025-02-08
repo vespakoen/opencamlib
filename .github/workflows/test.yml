@@ -150,7 +150,7 @@ jobs:
 
           if [ "${{ matrix.os_short }}" == "linux" ]; then
             sudo apt-get update
-            sudo apt-get install -y libomp-dev libboost-dev libboost-python1.83.0-dev
+            sudo apt-get install -y libomp-dev libboost-dev libboost-python-dev
           fi
           if [ "${{ matrix.os_short }}" == "macos" ]; then
             brew install libomp boost-python3
