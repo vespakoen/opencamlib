@@ -61,11 +61,12 @@ if(USE_OPENMP)
   target_link_libraries(ocl PRIVATE OpenMP::OpenMP_CXX)
 endif()
 
-install(TARGETS ocl LIBRARY DESTINATION "${Python3_SITEARCH}/opencamlib")
+file(TO_CMAKE_PATH "${Python3_SITEARCH}/opencamlib" INSTALL_PATH)
+install(TARGETS ocl LIBRARY DESTINATION "${INSTALL_PATH}")
 if(NOT SKBUILD)
   install(
     DIRECTORY pythonlib/opencamlib/
-    DESTINATION "${Python3_SITEARCH}/opencamlib"
+    DESTINATION "${INSTALL_PATH}"
   )
 endif()
 
