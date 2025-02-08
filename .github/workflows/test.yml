@@ -44,7 +44,7 @@ jobs:
             brew install libomp boost
           fi
           if [ "${{ matrix.os_short }}" == "windows" ]; then
-            choco install boost-msvc-14.2
+            choco install boost-msvc-14.3
           fi
 
           # curl -L -O https://github.com/boostorg/boost/releases/download/boost-1.87.0/boost-1.87.0-cmake.tar.gz
