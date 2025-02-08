@@ -44,16 +44,14 @@ jobs:
             brew install libomp boost
           fi
           if [ "${{ matrix.os_short }}" == "windows" ]; then
-            choco install boost-msvc-14.3
+            curl -L -O https://github.com/boostorg/boost/releases/download/boost-1.87.0/boost-1.87.0-cmake.tar.gz
+            tar -xzf boost-1.87.0-cmake.tar.gz
+            cd boost-1.87.0
+            cmake -D BOOST_INCLUDE_LIBRARIES="regex" -S . -B build
+            cmake --build build --parallel 4
+            cmake --install build --prefix /c/local/boost_1_87_0
+            cd ..
           fi
-
-          # curl -L -O https://github.com/boostorg/boost/releases/download/boost-1.87.0/boost-1.87.0-cmake.tar.gz
-          # tar -xzf boost-1.87.0-cmake.tar.gz
-          # cd boost-1.87.0
-          # cmake -D BOOST_INCLUDE_LIBRARIES="regex" -S . -B build
-          # cmake --build build --parallel 4
-          # cmake --install build --prefix $(pwd)/../lib/boost
-          # cd ..
 
           cmake \
             -D CMAKE_BUILD_TYPE=Release \
@@ -142,9 +140,9 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python_version }}
+      # - uses: actions/setup-python@v5
+      #   with:
+      #     python-version: ${{ matrix.python_version }}
       - name: Install
         shell: bash
         run: |
@@ -160,21 +158,18 @@ jobs:
             sudo apt-get install -y libomp-dev libboost-dev libboost-python-dev
           fi
           if [ "${{ matrix.os_short }}" == "macos" ]; then
-            brew install libomp boost-python3
+            brew install python3 libomp boost-python3
           fi
           if [ "${{ matrix.os_short }}" == "windows" ]; then
-            # choco install boost-msvc-14.3
-            curl -L -O https://github.com/userdocs/boost/releases/download/boost-1.87.0/boost_1_87_0-msvc-14.3-64.exe
-            ./boost_1_87_0-msvc-14.3-64.exe /VERYSILENT
+            curl -L -O https://github.com/boostorg/boost/releases/download/boost-1.87.0/boost-1.87.0-cmake.tar.gz
+            tar -xzf boost-1.87.0-cmake.tar.gz
+            cd boost-1.87.0
+            cmake -D BOOST_INCLUDE_LIBRARIES="python" -DBOOST_ENABLE_PYTHON="ON" -S . -B build
+            cmake --build build --parallel 4
+            cmake --install build --prefix /c/local/boost_1_87_0
+            cd ..
           fi
 
-          # curl -L -O https://github.com/boostorg/boost/releases/download/boost-1.87.0/boost-1.87.0-cmake.tar.gz
-          # tar -xzf boost-1.87.0-cmake.tar.gz
-          # cd boost-1.87.0
-          # cmake  -DBOOST_INCLUDE_LIBRARIES="python" -DBOOST_ENABLE_PYTHON="ON" -S . -B build
-          # cmake --build build --parallel 4
-          # cmake --install build --prefix $(pwd)/../lib/boost
-          # cd ..
 
           cmake \
             -D CMAKE_BUILD_TYPE=Release \
