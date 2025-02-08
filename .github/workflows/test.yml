@@ -164,7 +164,7 @@ jobs:
           fi
           cmake \
             -D CMAKE_BUILD_TYPE=Release \
-            ${IS_WINDOWS:+"-D CMAKE_PREFIX_PATH=/c/boost"} \
+            ${IS_WINDOWS:+"-D CMAKE_PREFIX_PATH=C:/boost"} \
             -D BUILD_PY_LIB=ON \
             -S . -B build
           cmake --build build --parallel 4
