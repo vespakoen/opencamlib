@@ -53,9 +53,15 @@ jobs:
             cd ..
           fi
 
+          if [ "${{ matrix.os_short }}" == "windows" ]; then
+            export IS_WINDOWS=1
+          fi
+
           cmake \
             -D CMAKE_BUILD_TYPE=Release \
             -D BUILD_CXX_LIB="ON" \
+            -D Boost_ADDITIONAL_VERSIONS="1.87.0" \
+            ${IS_WINDOWS:+"-D CMAKE_PREFIX_PATH=C:\\boost"} \
             -S . -B build
           cmake --build build --parallel 4
           cmake --install build --prefix $(pwd)/lib/ocl
@@ -164,9 +170,9 @@ jobs:
           fi
           cmake \
             -D CMAKE_BUILD_TYPE=Release \
-            -D Boost_ADDITIONAL_VERSIONS="1.87.0" \
-            -D CMAKE_PREFIX_PATH=C:/boost" \
             -D BUILD_PY_LIB=ON \
+            -D Boost_ADDITIONAL_VERSIONS="1.87.0" \
+            ${IS_WINDOWS:+"-D CMAKE_PREFIX_PATH=C:\\boost"} \
             -S . -B build
           cmake --build build --parallel 4
           cmake --install build
