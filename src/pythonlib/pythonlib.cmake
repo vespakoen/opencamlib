@@ -22,6 +22,7 @@ if(Python3_FOUND)
   message(STATUS "Found Python: " ${Python3_VERSION})
   message(STATUS "Python libraries: " ${Python3_LIBRARIES})
   message(STATUS "Python executable: " ${Python3_EXECUTABLE})
+  message(STATUS "Python sitearch: " ${Python3_SITEARCH})
 endif()
 find_package(Boost CONFIG COMPONENTS python${Python3_VERSION_MAJOR}${Python3_VERSION_MINOR} REQUIRED)
 
