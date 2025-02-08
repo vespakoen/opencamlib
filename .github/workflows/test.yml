@@ -50,16 +50,17 @@ jobs:
           # curl -L -O https://github.com/boostorg/boost/releases/download/boost-1.87.0/boost-1.87.0-cmake.tar.gz
           # tar -xzf boost-1.87.0-cmake.tar.gz
           # cd boost-1.87.0
-          # cmake -DBOOST_INCLUDE_LIBRARIES="regex" -S . -B build
+          # cmake -D BOOST_INCLUDE_LIBRARIES="regex" -S . -B build
           # cmake --build build --parallel 4
           # cmake --install build --prefix $(pwd)/../lib/boost
           # cd ..
 
-          cmake -S . -B build
+          cmake -D BUILD_CXX_LIB="ON" -S . -B build
           cmake --build build --parallel 4
           cmake --install build --prefix $(pwd)/lib/ocl
+
           cd examples/cpp/test
-          cmake -DOpenCAMLib_DIR="$(pwd)/lib/ocl" -S . -B build
+          cmake -D CMAKE_PREFIX_PATH="$(pwd)/../../../lib/ocl" -S . -B build
           cmake --build --parallel 4 build
           ./build/test_example
     #       # if [ "${{ matrix.os_short }}" == "linux" ]; then
@@ -147,15 +148,26 @@ jobs:
             source venv/bin/activate
           fi
 
-          curl -L -O https://github.com/boostorg/boost/releases/download/boost-1.87.0/boost-1.87.0-cmake.tar.gz
-          tar -xzf boost-1.87.0-cmake.tar.gz
-          cd boost-1.87.0
-          cmake -DBOOST_INCLUDE_LIBRARIES="python" -DBOOST_ENABLE_PYTHON="ON" -S . -B build
-          cmake --build build --parallel 4
-          cmake --install build --prefix $(pwd)/../lib/boost
-          cd ..
+          if [ "${{ matrix.os_short }}" == "linux" ]; then
+            sudo apt-get update
+            sudo apt-get install -y libomp-dev libboost-dev libboost-python-dev
+          fi
+          if [ "${{ matrix.os_short }}" == "macos" ]; then
+            brew install libomp boost-python3
+          fi
+          if [ "${{ matrix.os_short }}" == "windows" ]; then
+            choco install boost-msvc-14.3
+          fi
 
-          cmake -DCMAKE_PREFIX_PATH="$(pwd)/lib/boost" -DBUILD_PY_LIB=ON -S . -B build
+          # curl -L -O https://github.com/boostorg/boost/releases/download/boost-1.87.0/boost-1.87.0-cmake.tar.gz
+          # tar -xzf boost-1.87.0-cmake.tar.gz
+          # cd boost-1.87.0
+          # cmake -DBOOST_INCLUDE_LIBRARIES="python" -DBOOST_ENABLE_PYTHON="ON" -S . -B build
+          # cmake --build build --parallel 4
+          # cmake --install build --prefix $(pwd)/../lib/boost
+          # cd ..
+
+          cmake -D BUILD_PY_LIB=ON -S . -B build
           cmake --build build --parallel 4
           cmake --install build
           cd examples/python
