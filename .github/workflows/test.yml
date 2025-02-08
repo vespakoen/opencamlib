@@ -36,6 +36,14 @@ jobs:
       - name: Install
         shell: bash
         run: |
+          curl -L -O https://github.com/boostorg/boost/releases/download/boost-1.87.0/boost-1.87.0-cmake.zip
+          unzip -qq boost-1.87.0-cmake.zip
+          cd boost-1.87.0-cmake
+          cmake -DBOOST_INCLUDE_LIBRARIES="" -S . -B build
+          cmake --build build --parallel 4
+          cmake --install build
+          cd ..
+
           cmake -S . -B build
           cmake --build build --parallel 4
           cmake --install build
@@ -129,7 +137,7 @@ jobs:
           fi
 
           curl -L -O https://github.com/boostorg/boost/releases/download/boost-1.87.0/boost-1.87.0-cmake.zip
-          unzip boost-1.87.0-cmake.zip
+          unzip -qq boost-1.87.0-cmake.zip
           cd boost-1.87.0-cmake
           cmake -DBOOST_INCLUDE_LIBRARIES="python" -DBOOST_ENABLE_PYTHON="ON" -S . -B build
           cmake --build build --parallel 4
