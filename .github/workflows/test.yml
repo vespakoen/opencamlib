@@ -43,6 +43,7 @@ jobs:
             /c/Program Files (x86)/Boost
       - name: Build Boost on windows only
         if: ${{ matrix.os_short == 'windows' && steps.cache-boost.outputs.cache-hit != 'true' }}
+        shell: bash
         run: |
           curl -L -O https://github.com/boostorg/boost/releases/download/boost-1.87.0/boost-1.87.0-cmake.tar.gz
           tar -xzf boost-1.87.0-cmake.tar.gz
@@ -145,13 +146,10 @@ jobs:
         run: |
           python -m venv venv
       - name: Build Boost on windows only
+        shell: bash
         if: ${{ matrix.os_short == 'windows' && steps.cache-boost-python.outputs.cache-hit != 'true' }}
         run: |
-          if [ "${{ matrix.os_short }}" == "windows" ]; then
-            source venv/Scripts/activate
-          else
-            source venv/bin/activate
-          fi
+          source venv/Scripts/activate
           curl -L -O https://github.com/boostorg/boost/releases/download/boost-1.87.0/boost-1.87.0-cmake.tar.gz
           tar -xzf boost-1.87.0-cmake.tar.gz
           cd boost-1.87.0
