@@ -70,7 +70,7 @@ tar -xzf $archive_name
 echo "Compiling Boost"
 cd $extracted_dir_name
 
-python_exe="$(which python)"
+python_exe="$(python -c 'import sys; print(sys.executable)')"
 
 echo "Found python at: ${python_exe}"
 
