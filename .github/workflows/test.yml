@@ -194,6 +194,8 @@ jobs:
           echo $dumpbinPath >> $env:GITHUB_PATH
       - name: Test
         shell: bash
+        env:
+          MSYS_NO_PATHCONV: 1
         run: |
           if [ "${{ matrix.os_short }}" == "windows" ]; then
             source venv/Scripts/activate
