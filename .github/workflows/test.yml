@@ -213,6 +213,5 @@ jobs:
           cmake \
             --install build \
             --config Release
-          dumpbin venv\lib\site-packages\opencamlib\ocl.pyd
           cd examples/python
           python test.py
