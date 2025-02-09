@@ -82,7 +82,8 @@ jobs:
           cmake \
             --install build \
             --config Release \
-            --prefix $(pwd)/lib/ocl
+            --prefix $(pwd)/lib/ocl \
+            --verbose
 
           cd examples/cpp/test
           cmake \
