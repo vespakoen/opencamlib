@@ -173,10 +173,11 @@ jobs:
         run: |
           if [ "${{ matrix.os_short }}" == "windows" ]; then
             source venv/Scripts/activate
+            python_exe="$(pwd)/venv/Scripts/python.exe"
           else
             source venv/bin/activate
+            python_exe="$(pwd)/venv/bin/python"
           fi
-          python_exe=$(which python)
           echo "Python executable: $python_exe"
           cmake \
             -D CMAKE_BUILD_TYPE=Release \
