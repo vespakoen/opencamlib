@@ -76,6 +76,12 @@ jobs:
           ./scripts/install_libomp_macos.sh
       - name: cxxlib
         shell: bash
+        env:
+          CMAKE_GENERATOR: "${{ matrix.cmake_generator }}"
+          CMAKE_GENERATOR_PLATFORM: "${{ matrix.cmake_generator_platform }}"
+          CMAKE_OSX_ARCHITECTURES: "${{ matrix.architecture }}"
+          CMAKE_BUILD_TYPE: "Release"
+          CMAKE_CONFIGURATION_TYPES: "Release"
         run: |
           if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
             version="${GITHUB_REF##*/}"
@@ -84,28 +90,29 @@ jobs:
           fi
           echo "${version}" > src/git-tag.txt
 
-          if [ "${{ matrix.cmake_generator_platform }}" != "" ]; then
-            export CMAKE_GENERATOR="${{ matrix.cmake_generator }}"
-            export CMAKE_GENERATOR_PLATFORM="${{ matrix.cmake_generator_platform }}"
-          fi
-          if [ "${{ matrix.os_short }}" == "macos" ]; then
-            export CMAKE_OSX_ARCHITECTURES="${{ matrix.architecture }}"
-          fi
+          # if [ "${{ matrix.cmake_generator_platform }}" != "" ]; then
+          #   export CMAKE_GENERATOR="${{ matrix.cmake_generator }}"
+          #   export CMAKE_GENERATOR_PLATFORM="${{ matrix.cmake_generator_platform }}"
+          # fi
+          # if [ "${{ matrix.os_short }}" == "macos" ]; then
+          #   export CMAKE_OSX_ARCHITECTURES="${{ matrix.architecture }}"
+          # fi
+          # export CMAKE_BUILD_TYPE=Release
+          # export CMAKE_CONFIGURATION_TYPES=Release
 
           if [ "${{ matrix.docker_image }}" != "" ]; then
-            echo '#!/usr/bin/env bash' >> run.sh
-            echo 'set -xe' >> run.sh
-            echo './scripts/install_boost.sh --headers-only' >> run.sh
-            echo 'cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_CONFIGURATION_TYPES=Release -D BUILD_CXX_LIB="ON" -S . -B build' >> run.sh
-            echo 'cmake --build build --config Release --parallel 4' >> run.sh
-            echo 'cmake --install build --config Release --prefix $(pwd)/dist --verbose' >> run.sh
-            chmod +x run.sh
-            docker run --user root -w /work -v "$(pwd):/work:rw" --rm "${{ matrix.docker_image }}" ./run.sh
+            docker run \
+              --user root \
+              --workdir /work \
+              --env CMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}" \
+              --env CMAKE_CONFIGURATION_TYPES="${CMAKE_CONFIGURATION_TYPES}" \
+              --volume "$(pwd):/work:rw" \
+              --rm "${{ matrix.docker_image }}" \
+              ./scripts/install_boost.sh --headers-only \
+                && ./scripts/build_cxx_lib.sh /work/dist
           else
             ./scripts/install_boost.sh --headers-only
-            cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_CONFIGURATION_TYPES=Release -D BUILD_CXX_LIB="ON" -S . -B build
-            cmake --build build --config Release --parallel 4
-            cmake --install build --config Release --prefix $(pwd)/dist --verbose
+            ./scripts/build_cxx_lib.sh $(pwd)/dist
           fi
       - uses: actions/upload-artifact@v4
         with:
