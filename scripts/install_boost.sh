@@ -90,5 +90,5 @@ else
     sudo cmake \
         --install build \
         --config ${config_type} \
-        > /dev/null # too noisy
+        > /dev/null 2>&1 # too noisy for CI logs (on a train)
 fi
