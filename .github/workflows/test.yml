@@ -53,8 +53,8 @@ jobs:
               -D CMAKE_CONFIGURATION_TYPES=Release \
               -D BOOST_INCLUDE_LIBRARIES="math;foreach;graph" \
               -S . -B build
-            cmake --build build --parallel 4
-            cmake --install build --prefix "/c/Program Files (x86)/Boost"
+            cmake --build build --config Release --parallel 4
+            cmake --install build --config Release --prefix "/c/Program Files (x86)/Boost"
             cd ..
           fi
 
@@ -64,8 +64,8 @@ jobs:
             -D CMAKE_CONFIGURATION_TYPES=Release \
             -D BUILD_CXX_LIB="ON" \
             -S . -B build
-          cmake --build build --parallel 4
-          cmake --install build --prefix $(pwd)/lib/ocl --verbose
+          cmake --build build --config Release --parallel 4
+          cmake --install build --config Release --prefix $(pwd)/lib/ocl --verbose
 
           cd examples/cpp/test
           cmake \
@@ -73,7 +73,7 @@ jobs:
             -D CMAKE_CONFIGURATION_TYPES=Release \
             -D CMAKE_PREFIX_PATH="$(pwd)/../../../lib/ocl" \
             -S . -B build
-          cmake --build build --parallel 4
+          cmake --build build --config Release --parallel 4
           cd ./build
           ./test_example
   # nodejs:
@@ -168,8 +168,8 @@ jobs:
               -D BOOST_INCLUDE_LIBRARIES="python;math;foreach;graph" \
               -D BOOST_ENABLE_PYTHON="ON" \
               -S . -B build
-            cmake --build build --parallel 4
-            cmake --install build --prefix "/c/Program Files (x86)/Boost"
+            cmake --build build --config Release --parallel 4
+            cmake --install build --config Release --prefix "/c/Program Files (x86)/Boost"
             cd ..
           fi
 
@@ -178,7 +178,7 @@ jobs:
             -D CMAKE_CONFIGURATION_TYPES=Release \
             -D BUILD_PY_LIB=ON \
             -S . -B build
-          cmake --build build --parallel 4
-          cmake --install build
+          cmake --build build --config Release --parallel 4
+          cmake --install build --config Release --verbose
           cd examples/python
           python test.py
