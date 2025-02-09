@@ -98,7 +98,7 @@ jobs:
             echo './scripts/install_boost.sh --headers-only' >> run.sh
             echo 'cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_CONFIGURATION_TYPES=Release -D BUILD_CXX_LIB="ON" -S . -B build' >> run.sh
             echo 'cmake --build build --config Release --parallel 4' >> run.sh
-            echo 'cmake --run build --config Release --prefix $(pwd)/dist --verbose' >> run.sh
+            echo 'cmake --install build --config Release --prefix $(pwd)/dist --verbose' >> run.sh
             chmod +x run.sh
             docker run --user root -w /work -v "$(pwd):/work:rw" --rm "${{ matrix.docker_image }}" ./run.sh
           else
