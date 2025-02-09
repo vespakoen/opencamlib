@@ -9,7 +9,7 @@ on:
     branches:
       - master
       - develop
-      - feat/experiments
+      # - feat/experiments
     tags:
       - v*
 
