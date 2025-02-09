@@ -82,6 +82,7 @@ cmake \
     -D Python_FIND_REGISTRY="NEVER" \
     -D Python_FIND_FRAMEWORK="NEVER" \
     -D Python_FIND_VIRTUALENV="FIRST" \
+    -D CMAKE_POLICY_DEFAULT_CMP0094=NEW \
     ${include_python:+"-D BOOST_ENABLE_PYTHON=ON"} \
     -D BOOST_INCLUDE_LIBRARIES="${boost_libraries}" \
     -S . \
@@ -92,14 +93,13 @@ cmake \
     --config ${config_type} \
     --parallel $(num_procs)
 
-if [ "${determined_os}" == "windows" ] || [ ! -x "$(command -v sudo)" ]; then
+if [ "${determined_os}" == "windows" ]; then
     cmake \
         --install build \
         --config ${config_type}
 else
-    sudo cmake \
+    cmake \
         --install build \
-        --config ${config_type} #\
-        #> /dev/null 2>&1 # too noisy for CI logs (on a train)
-    echo "Boost installed successfully"
+        --config ${config_type}
 fi
+echo "Boost installed successfully"
