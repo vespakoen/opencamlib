@@ -91,4 +91,5 @@ else
         --install build \
         --config ${config_type} \
         > /dev/null 2>&1 # too noisy for CI logs (on a train)
+    echo "Boost installed successfully"
 fi
