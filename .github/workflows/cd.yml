@@ -307,13 +307,11 @@ jobs:
             BOOST_ROOT="$(cygpath -w $(pwd))"
             CMAKE_GENERATOR="Visual Studio 17 2022"
             CMAKE_GENERATOR_PLATFORM="${{ matrix.cmake_generator_platform }}"
-          CIBW_ENVIRONMENT_PASS_WINDOWS: "BOOST_ROOT CMAKE_GENERATOR CMAKE_GENERATOR_PLATFORM"
           CIBW_ARCHS_MACOS: "${{ matrix.architecture }}"
           CIBW_ENVIRONMENT_MACOS: >
             BOOST_ROOT="$(pwd)"
             CMAKE_OSX_ARCHITECTURES="${{ matrix.architecture }}"
             OPENMP_PREFIX_MACOS="/tmp/libomp/libomp/fixed"
-          CIBW_ENVIRONMENT_PASS_MACOS: "BOOST_ROOT OPENMP_PREFIX_MACOS CMAKE_OSX_ARCHITECTURES"
           CIBW_ARCHS_LINUX: "${{ matrix.architecture }}"
           CIBW_ENVIRONMENT_LINUX: >
             BOOST_ROOT="$(pwd)"

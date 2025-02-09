@@ -72,6 +72,11 @@ cd $extracted_dir_name
 cmake \
     -D CMAKE_BUILD_TYPE="${build_type}" \
     -D CMAKE_CONFIGURATION_TYPES=${config_type} \
+    -D Python_EXECUTABLE="$(which python)" \
+    -D Python_FIND_STRATEGY="LOCATION" \
+    -D Python_FIND_REGISTRY="NEVER" \
+    -D Python_FIND_FRAMEWORK="NEVER" \
+    -D Python_FIND_VIRTUALENV="FIRST" \
     ${include_python:+"-D BOOST_ENABLE_PYTHON=ON"} \
     -D BOOST_INCLUDE_LIBRARIES="${boost_libraries}" \
     -S . \
