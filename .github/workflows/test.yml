@@ -168,16 +168,6 @@ jobs:
         if: ${{ matrix.os_short == 'macos' }}
         run: |
           brew install python3 libomp boost-python3
-      - name: Install Dumpbin
-        if: ${{ matrix.os_short == 'windows' }}
-        shell: powershell
-        run: |
-          choco install visualstudio2019buildtools --package-parameters "--includeRecommended --includeOptional --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64" --no-progress
-          # Set up PATH for Visual Studio
-          $vsPath = "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Tools\MSVC"
-          $latestVersion = (Get-ChildItem -Path $vsPath | Sort-Object Name -Descending | Select-Object -First 1).Name
-          $dumpbinPath = "$vsPath\$latestVersion\bin\Hostx64\x64"
-          echo $dumpbinPath >> $env:GITHUB_PATH
       - name: Build
         shell: bash
         run: |
@@ -191,8 +181,18 @@ jobs:
           cmake --install build --config Release --verbose
           if [ "${{ matrix.os_short }}" == "windows" ]; then
             ls -lah venv/lib/site-packages/opencamlib
-            dumpbin /exports venv/lib/site-packages/opencamlib/ocl.pyd
           fi
+      - name: Install Dumpbin
+        if: ${{ matrix.os_short == 'windows' }}
+        shell: powershell
+        run: |
+          choco install visualstudio2019buildtools --package-parameters "--includeRecommended --includeOptional --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64" --no-progress
+          # Set up PATH for Visual Studio
+          $vsPath = "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Tools\MSVC"
+          $latestVersion = (Get-ChildItem -Path $vsPath | Sort-Object Name -Descending | Select-Object -First 1).Name
+          $dumpbinPath = "$vsPath\$latestVersion\bin\Hostx64\x64"
+          echo $dumpbinPath >> $env:GITHUB_PATH
+          dumpbin /EXPORTS venv/lib/site-packages/opencamlib/ocl.pyd
       - name: Test
         shell: bash
         run: |
