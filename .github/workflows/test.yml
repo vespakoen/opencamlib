@@ -194,24 +194,11 @@ jobs:
           if [ "${{ matrix.os_short }}" == "windows" ]; then
             ls -lah venv/lib/site-packages/opencamlib
           fi
-      - name: Install Dumpbin
-        if: ${{ matrix.os_short == 'windows' }}
-        shell: powershell
-        run: |
-          choco install visualstudio2019buildtools --package-parameters "--includeRecommended --includeOptional --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64" --no-progress
-          # Set up PATH for Visual Studio
-          $vsPath = "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Tools\MSVC"
-          $latestVersion = (Get-ChildItem -Path $vsPath | Sort-Object Name -Descending | Select-Object -First 1).Name
-          $dumpbinPath = "$vsPath\$latestVersion\bin\Hostx64\x64"
-          echo $dumpbinPath >> $env:GITHUB_PATH
       - name: Test
         shell: bash
-        env:
-          MSYS_NO_PATHCONV: 1
         run: |
           if [ "${{ matrix.os_short }}" == "windows" ]; then
             source venv/Scripts/activate
-            dumpbin /DEPENDENTS venv/lib/site-packages/opencamlib/ocl.pyd
           else
             source venv/bin/activate
           fi
