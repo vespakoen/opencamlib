@@ -34,16 +34,19 @@ jobs:
             os: "windows-2022"
             os_short: "windows"
             architecture: "ia32"
+            cmake_generator: "Visual Studio 17 2022"
             cmake_generator_platform: "Win32"
           - os_arch: "windows-x64"
             os: "windows-2022"
             os_short: "windows"
             architecture: "x64"
+            cmake_generator: "Visual Studio 17 2022"
             cmake_generator_platform: "x64"
           - os_arch: "windows-arm64"
             os: "windows-2022"
             os_short: "windows"
             architecture: "arm64"
+            cmake_generator: "Visual Studio 17 2022"
             cmake_generator_platform: "ARM64"
           - os_arch: "macos-x86_64"
             os: "macos-15"
@@ -82,6 +85,7 @@ jobs:
           echo "${version}" > src/git-tag.txt
 
           if [ "${{ matrix.cmake_generator_platform }}" != "" ]; then
+            export CMAKE_GENERATOR="${{ matrix.cmake_generator }}"
             export CMAKE_GENERATOR_PLATFORM="${{ matrix.cmake_generator_platform }}"
           fi
           if [ "${{ matrix.os_short }}" == "macos" ]; then
