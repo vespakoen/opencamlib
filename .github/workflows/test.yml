@@ -41,7 +41,7 @@ jobs:
           key: boost-${{ runner.os }}-${{ hashFiles('**/CMakeLists.txt') }}
           path: |
             /c/Program Files (x86)/Boost
-      - name: Build Boost on windows only
+      - name: Build Boost windows
         if: ${{ matrix.os_short == 'windows' && steps.cache-boost.outputs.cache-hit != 'true' }}
         shell: bash
         run: |
@@ -67,7 +67,9 @@ jobs:
           cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_CONFIGURATION_TYPES=Release -D BUILD_CXX_LIB="ON" -S . -B build
           cmake --build build --config Release --parallel 4
           cmake --install build --config Release --prefix $(pwd)/lib/ocl --verbose
-
+      - name: Test
+        shell: bash
+        run: |
           cd examples/cpp/test
           cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_CONFIGURATION_TYPES=Release -D CMAKE_PREFIX_PATH="$(pwd)/../../../lib/ocl" -S . -B build
           cmake --build build --config Release --parallel 4
@@ -143,9 +145,10 @@ jobs:
           path: |
             /c/Program Files (x86)/Boost
       - name: Python venv
+        shell: bash
         run: |
           python -m venv venv
-      - name: Build Boost on windows only
+      - name: Build Boost windows
         shell: bash
         if: ${{ matrix.os_short == 'windows' && steps.cache-boost-python.outputs.cache-hit != 'true' }}
         run: |
@@ -176,5 +179,16 @@ jobs:
           cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_CONFIGURATION_TYPES=Release -D BUILD_PY_LIB=ON -S . -B build
           cmake --build build --config Release --parallel 4
           cmake --install build --config Release --verbose
+          if [ "${{ matrix.os_short }}" == "windows" ]; then
+            ls -lah venv/lib/site-packages/opencamlib
+          fi
+      - name: Test
+        shell: bash
+        run: |
+          if [ "${{ matrix.os_short }}" == "windows" ]; then
+            source venv/Scripts/activate
+          else
+            source venv/bin/activate
+          fi
           cd examples/python
           python test.py
