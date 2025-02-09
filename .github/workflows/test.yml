@@ -192,12 +192,12 @@ jobs:
           $latestVersion = (Get-ChildItem -Path $vsPath | Sort-Object Name -Descending | Select-Object -First 1).Name
           $dumpbinPath = "$vsPath\$latestVersion\bin\Hostx64\x64"
           echo $dumpbinPath >> $env:GITHUB_PATH
-          dumpbin /EXPORTS venv/lib/site-packages/opencamlib/ocl.pyd
       - name: Test
         shell: bash
         run: |
           if [ "${{ matrix.os_short }}" == "windows" ]; then
             source venv/Scripts/activate
+            dumpbin /EXPORTS venv/lib/site-packages/opencamlib/ocl.pyd
           else
             source venv/bin/activate
           fi
