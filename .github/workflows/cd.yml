@@ -297,7 +297,7 @@ jobs:
         with:
           platforms: arm64
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.11.2
+        uses: pypa/cibuildwheel@v2.22.0
         env:
           CIBW_BUILD: "cp${{ matrix.python_version }}-*"
           CIBW_PLATFORM: "${{ matrix.os_short }}"

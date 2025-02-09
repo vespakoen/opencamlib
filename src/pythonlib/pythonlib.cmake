@@ -1,9 +1,15 @@
-set (CMAKE_FIND_FRAMEWORK NEVER)
-
-if (CMAKE_VERSION VERSION_LESS 3.18)
-  set(DEV_MODULE Development)
-else()
-  set(DEV_MODULE Development.Module)
+# saner defaults
+if(NOT DEFINED Python_FIND_STRATEGY)
+  set(Python_FIND_STRATEGY LOCATION)
+endif()
+if(NOT DEFINED Python_FIND_REGISTRY)
+  set(Python_FIND_REGISTRY NEVER)
+endif()
+if(NOT DEFINED Python_FIND_FRAMEWORK)
+  set(Python_FIND_FRAMEWORK NEVER)
+endif()
+if(NOT DEFINED Python_FIND_VIRTUALENV)
+  set(Python_FIND_VIRTUALENV FIRST)
 endif()
 
 find_package(Python COMPONENTS Interpreter ${DEV_MODULE} REQUIRED)
