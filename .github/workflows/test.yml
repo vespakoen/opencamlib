@@ -176,13 +176,11 @@ jobs:
           else
             source venv/bin/activate
           fi
+          python_exe=$(which python)
           cmake \
-            --debug-find \
-            --trace \
             -D CMAKE_BUILD_TYPE=Release \
             -D CMAKE_CONFIGURATION_TYPES=Release \
-            -D Python_ROOT_DIR="$(pwd)/venv" \
-            -D Python_FIND_STRATEGY="LOCATION" \
+            -D Python_EXECUTABLE="$python_exe" \
             -D BUILD_PY_LIB=ON \
             -S . -B build
           cmake --build build --config Release --parallel 4
