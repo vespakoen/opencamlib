@@ -96,8 +96,7 @@ jobs:
               --env CMAKE_CONFIGURATION_TYPES="${CMAKE_CONFIGURATION_TYPES}" \
               --volume "$(pwd):/work:rw" \
               --rm "${{ matrix.docker_image }}" \
-              ./scripts/install_boost.sh --headers-only \
-                && ./scripts/build_cxx_lib.sh /work/dist
+              ./scripts/install_boost.sh --headers-only && ./scripts/build_cxx_lib.sh /work/dist
           else
             ./scripts/install_boost.sh --headers-only
             ./scripts/build_cxx_lib.sh $(pwd)/dist
