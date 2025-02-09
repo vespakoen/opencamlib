@@ -168,6 +168,9 @@ jobs:
         if: ${{ matrix.os_short == 'macos' }}
         run: |
           brew install python3 libomp boost-python3
+      - name: Install Dumpbin
+        if: ${{ matrix.os_short == 'windows' }}
+        uses: lorenalexm/install-dumpbin-action@main
       - name: Build
         shell: bash
         run: |
@@ -181,6 +184,7 @@ jobs:
           cmake --install build --config Release --verbose
           if [ "${{ matrix.os_short }}" == "windows" ]; then
             ls -lah venv/lib/site-packages/opencamlib
+            dumpbin /exports venv/lib/site-packages/opencamlib/ocl.pyd
           fi
       - name: Test
         shell: bash
