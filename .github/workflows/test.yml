@@ -71,6 +71,7 @@ jobs:
           mkdir -p lib/ocl
           cmake \
             -D CMAKE_BUILD_TYPE=Release \
+            -D CMAKE_CONFIGURATION_TYPES=Release \
             -D BUILD_CXX_LIB="ON" \
             -S . \
             -B build

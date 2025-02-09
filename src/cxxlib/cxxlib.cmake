@@ -37,8 +37,8 @@ target_include_directories(ocl
 if(WIN32 AND MSVC) # AND CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS
 #   get_target_property(_INTER_OPT ocl INTERPROCEDURAL_OPTIMIZATION)
 #   if(_INTER_OPT)
-#     message(STATUS "Workaround MSVC dll exports with INTERPROCEDURAL_OPTIMIZATION")
-#     set_target_properties(ocl PROPERTIES INTERPROCEDURAL_OPTIMIZATION OFF)
+    message(STATUS "Workaround MSVC dll exports with INTERPROCEDURAL_OPTIMIZATION")
+    set_target_properties(ocl PROPERTIES INTERPROCEDURAL_OPTIMIZATION OFF)
     target_link_options(ocl PRIVATE /LTCG)
 #   endif()
 #   unset(_INTER_OPT)
