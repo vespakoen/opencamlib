@@ -68,13 +68,20 @@ jobs:
             export IS_WINDOWS=1
           fi
 
+          mkdir -p lib/ocl
           cmake \
             -D CMAKE_BUILD_TYPE=Release \
             -D BUILD_CXX_LIB="ON" \
             -S . \
             -B build
-          cmake --build build --config Release --parallel 4
-          cmake --install build --config Release --prefix $(pwd)/lib/ocl
+          cmake \
+            --build build \
+            --config Release \
+            --parallel 4
+          cmake \
+            --install build \
+            --config Release \
+            --prefix $(pwd)/lib/ocl
 
           cd examples/cpp/test
           cmake \
