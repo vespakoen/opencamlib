@@ -178,7 +178,6 @@ jobs:
             source venv/bin/activate
             python_exe="$(pwd)/venv/bin/python"
           fi
-          echo "Python executable: $python_exe"
           cmake \
             -D CMAKE_BUILD_TYPE=Release \
             -D CMAKE_CONFIGURATION_TYPES=Release \
