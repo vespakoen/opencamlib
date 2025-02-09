@@ -12,6 +12,12 @@ if(NOT DEFINED Python_FIND_VIRTUALENV)
   set(Python_FIND_VIRTUALENV FIRST)
 endif()
 
+if (CMAKE_VERSION VERSION_LESS 3.18)
+  set(DEV_MODULE Development)
+else()
+  set(DEV_MODULE Development.Module)
+endif()
+
 find_package(Python COMPONENTS Interpreter ${DEV_MODULE} REQUIRED)
 if(Python_FOUND)
   message(STATUS "Found Python: " ${Python_VERSION})
