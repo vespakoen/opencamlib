@@ -95,7 +95,7 @@ jobs:
           if [ "${{ matrix.docker_image }}" != "" ]; then
             echo '#!/usr/bin/env bash' >> run.sh
             echo 'set -xe' >> run.sh
-            echo './scripts/run_boost.sh --headers-only' >> run.sh
+            echo './scripts/install_boost.sh --headers-only' >> run.sh
             echo 'cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_CONFIGURATION_TYPES=Release -D BUILD_CXX_LIB="ON" -S . -B build' >> run.sh
             echo 'cmake --build build --config Release --parallel 4' >> run.sh
             echo 'cmake --run build --config Release --prefix $(pwd)/dist --verbose' >> run.sh
