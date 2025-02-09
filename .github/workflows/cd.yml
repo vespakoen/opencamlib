@@ -61,6 +61,22 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: libomp macos
+        if: ${{ matrix.os_short == 'macos' }}
+        run: |
+          if [ "${matrix.architecture}" = "arm64" ]; then
+            libomp_tar_loc=$(brew fetch --bottle-tag=arm64_sonoma libomp | grep -i downloaded | grep tar.gz | cut -f2 -d ":" | xargs echo)
+          else
+            libomp_tar_loc=$(brew fetch --bottle-tag=sonoma libomp | grep -i downloaded | grep tar.gz | cut -f2 -d ":" | xargs echo)
+          fi
+          temp_dir="/tmp"
+          cp "${libomp_tar_loc}" "${temp_dir}/libomp.tar.gz"
+          mkdir "${temp_dir}/libomp" || true
+          tar -xzf "${temp_dir}/libomp.tar.gz" -C "${temp_dir}/libomp"
+          libomp_prefix=$(find "${temp_dir}/libomp/libomp" -depth 1 | head -1)
+          export OPENMP_PREFIX_MACOS="${temp_dir}/libomp/libomp/fixed"
+          mv "${libomp_prefix}" "${OPENMP_PREFIX_MACOS}"
+          echo "${OPENMP_PREFIX_MACOS}" >> $env:GITHUB_PATH
       - name: cxxlib
         shell: bash
         run: |
@@ -71,21 +87,21 @@ jobs:
           fi
           echo "${version}" > src/git-tag.txt
 
+          if [ "${{ matrix.cmake_generator_platform }}" != "" ]; then
+            export CMAKE_GENERATOR_PLATFORM="${{ matrix.cmake_generator_platform }}"
+          fi
+          if [ "${{ matrix.os_short }}" == "macos" ]; then
+            export CMAKE_OSX_ARCHITECTURES="${{ matrix.architecture }}"
+          fi
+
           ./scripts/install_boost.sh --headers-only
 
-          # mkdir -p lib/ocl
           cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_CONFIGURATION_TYPES=Release -D BUILD_CXX_LIB="ON" -S . -B build
           cmake --build build --config Release --parallel 4
           cmake --install build --config Release --prefix $(pwd)/dist --verbose
 
           # if [ "${{ matrix.docker_image }}" != "" ]; then
           #   export OCL_DOCKER_IMAGE="${{ matrix.docker_image }}"
-          # fi
-          # if [ "${{ matrix.macos_architecture }}" != "" ]; then
-          #   export OCL_MACOS_ARCHITECTURE="${{ matrix.architecture }}"
-          # fi
-          # if [ "${{ matrix.cmake_generator_platform }}" != "" ]; then
-          #   export OCL_GENERATOR_PLATFORM="${{ matrix.cmake_generator_platform }}"
           # fi
 
           # ./install.sh \
