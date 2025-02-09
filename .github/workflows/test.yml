@@ -177,6 +177,8 @@ jobs:
             source venv/bin/activate
           fi
           cmake \
+            --debug-find \
+            --trace \
             -D CMAKE_BUILD_TYPE=Release \
             -D CMAKE_CONFIGURATION_TYPES=Release \
             -D Python3_ROOT_DIR="$(pwd)/venv" \
