@@ -176,7 +176,13 @@ jobs:
           else
             source venv/bin/activate
           fi
-          cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_CONFIGURATION_TYPES=Release -D BUILD_PY_LIB=ON -S . -B build
+          cmake \
+            -D CMAKE_BUILD_TYPE=Release \
+            -D CMAKE_CONFIGURATION_TYPES=Release \
+            -D Python3_ROOT_DIR="$(pwd)/venv" \
+            -D Python3_FIND_STRATEGY="LOCATION" \
+            -D BUILD_PY_LIB=ON \
+            -S . -B build
           cmake --build build --config Release --parallel 4
           cmake --install build --config Release --verbose
           if [ "${{ matrix.os_short }}" == "windows" ]; then
