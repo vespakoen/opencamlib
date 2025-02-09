@@ -89,6 +89,9 @@ jobs:
           echo "${version}" > src/git-tag.txt
 
           if [ "${{ matrix.docker_image }}" != "" ]; then
+            echo "./scripts/install_boost.sh --headers-only" >> run.sh
+            echo "./scripts/build_cxx_lib.sh /work/dist" >> run.sh
+            chmod +x ./run.sh
             docker run \
               --user root \
               --workdir /work \
@@ -96,7 +99,7 @@ jobs:
               --env CMAKE_CONFIGURATION_TYPES="${CMAKE_CONFIGURATION_TYPES}" \
               --volume "$(pwd):/work:rw" \
               --rm "${{ matrix.docker_image }}" \
-              "./scripts/install_boost.sh --headers-only && ./scripts/build_cxx_lib.sh /work/dist"
+              ./run.sh
           else
             ./scripts/install_boost.sh --headers-only
             ./scripts/build_cxx_lib.sh $(pwd)/dist
