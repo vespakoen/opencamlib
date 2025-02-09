@@ -57,6 +57,10 @@ determined_os=$(get_os)
 echo "Determined OS: $determined_os"
 echo "Determined num procs: $num_procs"
 
+if [ "${determined_os}" == "windows" ]; then
+    export CMAKE_INSTALL_PREFIX="/c/Program Files (x86)/Boost"
+fi
+
 echo "Downloading Boost"
 curl -L -O $boost_cmake_url
 
