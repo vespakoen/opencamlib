@@ -89,7 +89,7 @@ jobs:
             --boost-prefix $(pwd) \
             --install \
             --install-prefix $(pwd)/dist
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.os_short }}-cxx-${{ matrix.architecture }}
           path: |
@@ -178,7 +178,7 @@ jobs:
             --node-architecture ${{ matrix.node_architecture }} \
             --install \
             --install-prefix $(pwd)/dist
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.os_short }}-nodejs-${{ matrix.node_architecture }}
           path: |
@@ -314,7 +314,7 @@ jobs:
       #     if [ -d "boost_1_80_0" ]; then
       #       tar -czf boost-precompiled.tar.gz boost_1_80_0 || true
       #     fi
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.os_short }}-python-${{ matrix.architecture }}
           path: |
@@ -340,7 +340,7 @@ jobs:
             --boost-prefix $(pwd) \
             --install \
             --install-prefix $(pwd)/dist
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: emscripten
           path: |
