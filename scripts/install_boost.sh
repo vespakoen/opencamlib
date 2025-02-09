@@ -82,6 +82,12 @@ cmake \
     --config ${config_type} \
     --parallel $(num_procs)
 
-cmake \
-    --install build \
-    --config ${config_type}
+if [ "${determined_os}" == "windows" ]; then
+    cmake \
+        --install build \
+        --config ${config_type}
+else
+    sudo cmake \
+        --install build \
+        --config ${config_type}
+fi
