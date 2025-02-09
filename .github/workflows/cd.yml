@@ -92,15 +92,18 @@ jobs:
             export CMAKE_OSX_ARCHITECTURES="${{ matrix.architecture }}"
           fi
 
-          ./scripts/install_boost.sh --headers-only
 
           if [ "${{ matrix.docker_image }}" != "" ]; then
+            echo '#!/usr/bin/env bash' >> install.sh
+            echo 'set -xe' >> install.sh
+            echo './scripts/install_boost.sh --headers-only' >> install.sh
             echo 'cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_CONFIGURATION_TYPES=Release -D BUILD_CXX_LIB="ON" -S . -B build' >> install.sh
             echo 'cmake --build build --config Release --parallel 4' >> install.sh
             echo 'cmake --install build --config Release --prefix $(pwd)/dist --verbose' >> install.sh
             chmod +x install.sh
             docker run --user root -w /work -v "$(pwd):/work:rw" --rm "${{ matrix.docker_image }}" ./install.sh
           else
+            ./scripts/install_boost.sh --headers-only
             cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_CONFIGURATION_TYPES=Release -D BUILD_CXX_LIB="ON" -S . -B build
             cmake --build build --config Release --parallel 4
             cmake --install build --config Release --prefix $(pwd)/dist --verbose
