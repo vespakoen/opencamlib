@@ -89,7 +89,7 @@ if [ "${determined_os}" == "windows" ]; then
 else
     sudo cmake \
         --install build \
-        --config ${config_type} \
-        > /dev/null 2>&1 # too noisy for CI logs (on a train)
+        --config ${config_type} #\
+        #> /dev/null 2>&1 # too noisy for CI logs (on a train)
     echo "Boost installed successfully"
 fi
