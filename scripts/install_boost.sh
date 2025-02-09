@@ -69,10 +69,15 @@ tar -xzf $archive_name
 
 echo "Compiling Boost"
 cd $extracted_dir_name
+
+python_exe="$(which python)"
+
+echo "Found python at: ${python_exe}"
+
 cmake \
     -D CMAKE_BUILD_TYPE="${build_type}" \
-    -D CMAKE_CONFIGURATION_TYPES=${config_type} \
-    -D Python_EXECUTABLE="$(which python)" \
+    -D CMAKE_CONFIGURATION_TYPES="${config_type}" \
+    -D Python_EXECUTABLE="${python_exe}" \
     -D Python_FIND_STRATEGY="LOCATION" \
     -D Python_FIND_REGISTRY="NEVER" \
     -D Python_FIND_FRAMEWORK="NEVER" \
