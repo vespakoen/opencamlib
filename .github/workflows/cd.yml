@@ -23,6 +23,7 @@ jobs:
         os_arch: [
           "windows-ia32",
           "windows-x64",
+          "windows-arm64",
           "macos-x86_64",
           "macos-arm64",
           "linux-x86_64",
@@ -39,6 +40,11 @@ jobs:
             os_short: "windows"
             architecture: "x64"
             cmake_generator_platform: "x64"
+          - os_arch: "windows-arm64"
+            os: "windows-2022"
+            os_short: "windows"
+            architecture: "arm64"
+            cmake_generator_platform: "ARM64"
           - os_arch: "macos-x86_64"
             os: "macos-15"
             os_short: "macos"

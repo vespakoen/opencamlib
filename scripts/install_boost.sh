@@ -89,5 +89,6 @@ if [ "${determined_os}" == "windows" ]; then
 else
     sudo cmake \
         --install build \
-        --config ${config_type}
+        --config ${config_type} \
+        > /dev/null # too noisy
 fi
