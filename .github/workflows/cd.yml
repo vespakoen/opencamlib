@@ -80,8 +80,6 @@ jobs:
           CMAKE_GENERATOR: "${{ matrix.cmake_generator }}"
           CMAKE_GENERATOR_PLATFORM: "${{ matrix.cmake_generator_platform }}"
           CMAKE_OSX_ARCHITECTURES: "${{ matrix.architecture }}"
-          CMAKE_BUILD_TYPE: "Release"
-          CMAKE_CONFIGURATION_TYPES: "Release"
         run: |
           if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
             version="${GITHUB_REF##*/}"
@@ -89,16 +87,6 @@ jobs:
             version="$(date '+%Y.%-m.%-d').dev${GITHUB_RUN_NUMBER}"
           fi
           echo "${version}" > src/git-tag.txt
-
-          # if [ "${{ matrix.cmake_generator_platform }}" != "" ]; then
-          #   export CMAKE_GENERATOR="${{ matrix.cmake_generator }}"
-          #   export CMAKE_GENERATOR_PLATFORM="${{ matrix.cmake_generator_platform }}"
-          # fi
-          # if [ "${{ matrix.os_short }}" == "macos" ]; then
-          #   export CMAKE_OSX_ARCHITECTURES="${{ matrix.architecture }}"
-          # fi
-          # export CMAKE_BUILD_TYPE=Release
-          # export CMAKE_CONFIGURATION_TYPES=Release
 
           if [ "${{ matrix.docker_image }}" != "" ]; then
             docker run \
