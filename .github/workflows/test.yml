@@ -183,8 +183,6 @@ jobs:
             -D CMAKE_CONFIGURATION_TYPES=Release \
             -D Python_ROOT_DIR="$(pwd)/venv" \
             -D Python_FIND_STRATEGY="LOCATION" \
-            -D Python3_ROOT_DIR="$(pwd)/venv" \
-            -D Python3_FIND_STRATEGY="LOCATION" \
             -D BUILD_PY_LIB=ON \
             -S . -B build
           cmake --build build --config Release --parallel 4
