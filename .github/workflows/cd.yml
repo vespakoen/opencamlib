@@ -94,22 +94,17 @@ jobs:
 
           ./scripts/install_boost.sh --headers-only
 
-          cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_CONFIGURATION_TYPES=Release -D BUILD_CXX_LIB="ON" -S . -B build
-          cmake --build build --config Release --parallel 4
-          cmake --install build --config Release --prefix $(pwd)/dist --verbose
-
-          # if [ "${{ matrix.docker_image }}" != "" ]; then
-          #   export OCL_DOCKER_IMAGE="${{ matrix.docker_image }}"
-          # fi
-
-          # ./install.sh \
-          #   --build-library cxx \
-          #   --build-type release \
-          #   --install-ci-deps \
-          #   --install-boost \
-          #   --boost-prefix $(pwd) \
-          #   --install \
-          #   --install-prefix $(pwd)/dist
+          if [ "${{ matrix.docker_image }}" != "" ]; then
+            echo 'cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_CONFIGURATION_TYPES=Release -D BUILD_CXX_LIB="ON" -S . -B build' >> install.sh
+            echo 'cmake --build build --config Release --parallel 4' >> install.sh
+            echo 'cmake --install build --config Release --prefix $(pwd)/dist --verbose' >> install.sh
+            chmod +x install.sh
+            docker run --user root -w /work -v "$(pwd):/work:rw" --rm "${{ matrix.docker_image }}" ./install.sh
+          else
+            cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_CONFIGURATION_TYPES=Release -D BUILD_CXX_LIB="ON" -S . -B build
+            cmake --build build --config Release --parallel 4
+            cmake --install build --config Release --prefix $(pwd)/dist --verbose
+          fi
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.os_short }}-cxx-${{ matrix.architecture }}
