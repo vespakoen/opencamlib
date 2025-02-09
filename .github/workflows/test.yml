@@ -33,31 +33,39 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: Cache Boost on windows only
+        id: cache-boost
+        if: ${{ matrix.os_short == 'windows' }}
+        uses: actions/cache@v4
+        with:
+          key: boost-${{ runner.os }}-${{ hashFiles('**/CMakeLists.txt') }}
+          path: |
+            /c/Program Files (x86)/Boost
+      - name: Build Boost on windows only
+        if: ${{ matrix.os_short == 'windows' && steps.cache-boost.outputs.cache-hit != 'true' }}
+        run: |
+          curl -L -O https://github.com/boostorg/boost/releases/download/boost-1.87.0/boost-1.87.0-cmake.tar.gz
+          tar -xzf boost-1.87.0-cmake.tar.gz
+          cd boost-1.87.0
+          cmake \
+            -D CMAKE_BUILD_TYPE=Release \
+            -D CMAKE_CONFIGURATION_TYPES=Release \
+            -D BOOST_INCLUDE_LIBRARIES="math;foreach;graph" \
+            -S . -B build
+          cmake --build build --config Release --parallel 4
+          cmake --install build --config Release --prefix "/c/Program Files (x86)/Boost"
+      - name: Install deps linux
+        if: ${{ matrix.os_short == 'linux' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libomp-dev libboost-dev
+      - name: Install deps macos
+        if: ${{ matrix.os_short == 'macos' }}
+        run: |
+          brew install libomp boost
       - name: Install
         shell: bash
         run: |
-          if [ "${{ matrix.os_short }}" == "linux" ]; then
-            sudo apt-get update
-            sudo apt-get install -y libomp-dev libboost-dev
-          fi
-          if [ "${{ matrix.os_short }}" == "macos" ]; then
-            brew install libomp boost
-          fi
-          if [ "${{ matrix.os_short }}" == "windows" ]; then
-            # because selectively compiling what we need is faster than running the installer
-            curl -L -O https://github.com/boostorg/boost/releases/download/boost-1.87.0/boost-1.87.0-cmake.tar.gz
-            tar -xzf boost-1.87.0-cmake.tar.gz
-            cd boost-1.87.0
-            cmake \
-              -D CMAKE_BUILD_TYPE=Release \
-              -D CMAKE_CONFIGURATION_TYPES=Release \
-              -D BOOST_INCLUDE_LIBRARIES="math;foreach;graph" \
-              -S . -B build
-            cmake --build build --config Release --parallel 4
-            cmake --install build --config Release --prefix "/c/Program Files (x86)/Boost"
-            cd ..
-          fi
-
           mkdir -p lib/ocl
           cmake \
             -D CMAKE_BUILD_TYPE=Release \
