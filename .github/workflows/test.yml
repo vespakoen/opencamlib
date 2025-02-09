@@ -170,7 +170,14 @@ jobs:
           brew install python3 libomp boost-python3
       - name: Install Dumpbin
         if: ${{ matrix.os_short == 'windows' }}
-        uses: lorenalexm/install-dumpbin-action@main
+        shell: powershell
+        run: |
+          choco install visualstudio2019buildtools --package-parameters "--includeRecommended --includeOptional --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64" --no-progress
+          # Set up PATH for Visual Studio
+          $vsPath = "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Tools\MSVC"
+          $latestVersion = (Get-ChildItem -Path $vsPath | Sort-Object Name -Descending | Select-Object -First 1).Name
+          $dumpbinPath = "$vsPath\$latestVersion\bin\Hostx64\x64"
+          echo $dumpbinPath >> $env:GITHUB_PATH
       - name: Build
         shell: bash
         run: |
