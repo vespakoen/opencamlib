@@ -94,6 +94,7 @@ jobs:
               --workdir /work \
               --env CMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}" \
               --env CMAKE_CONFIGURATION_TYPES="${CMAKE_CONFIGURATION_TYPES}" \
+              --env CMAKE_PREFIX_PATH="/usr/local" \
               --volume "$(pwd):/work:rw" \
               --rm "${{ matrix.docker_image }}" \
               ./scripts/install_boost.sh --headers-only && ./scripts/build_cxx_lib.sh /work/dist
