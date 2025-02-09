@@ -87,7 +87,7 @@ cmake \
     --config ${config_type} \
     --parallel $(num_procs)
 
-if [ "${determined_os}" == "windows" ]; then
+if [ "${determined_os}" == "windows" ] || [ ! -x "$(command -v sudo)" ]; then
     cmake \
         --install build \
         --config ${config_type}
