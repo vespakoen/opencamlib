@@ -68,7 +68,7 @@ OpenCAMLib provides pre-compiled C++, Node.js and Python libraries for the follo
 | **Linux**   | x86_64 / aarch64 |
 +-------------+------------------+
 
-- The Python library is called ``opencamlib`` and is hosted on PyPi (pypi.org), precompiled libraries are available for Python v3.7 up to v3.11.
+- The Python library is called ``opencamlib`` and is hosted on PyPi (pypi.org), precompiled libraries are available for Python v3.7 up to v3.13.
 - The Node.js + emscripten library is called ``@opencamlib/opencamlib`` and is hosted on npm (npmjs.org), precompiled libraries are available for Node-API v3 and up.
 - The C++ library is called ``libocl`` and is hosted on our Github Releases page.
 

@@ -5,6 +5,7 @@ on:
     branches:
       - master
       - develop
+      - feat/experiments
     tags:
       - v*
   release:
@@ -343,116 +344,116 @@ jobs:
           path: |
             dist
 
-  publish-npm:
-    name: publish to NPM
-    needs: [
-      nodejs,
-      emscripten,
-      python,
-      cxx
-    ]
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - uses: actions/download-artifact@v3
-        with:
-          path: prebuilds
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: '14.x'
-      - name: Publish node.js library
-        shell: bash
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          # add readme to npm package
-          cp README* src/npmpackage
+  # publish-npm:
+  #   name: publish to NPM
+  #   needs: [
+  #     nodejs,
+  #     emscripten,
+  #     python,
+  #     cxx
+  #   ]
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         fetch-depth: 0
+  #     - uses: actions/download-artifact@v3
+  #       with:
+  #         path: prebuilds
+  #     - name: Setup Node
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '14.x'
+  #     - name: Publish node.js library
+  #       shell: bash
+  #       env:
+  #         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+  #       run: |
+  #         # add readme to npm package
+  #         cp README* src/npmpackage
 
-          # bump version
-          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
-            version="${GITHUB_REF##*/}"
-          else
-            version="$(date '+%Y.%-m.%-d')-dev.${GITHUB_RUN_NUMBER}"
-            is_dev="1"
-          fi
+  #         # bump version
+  #         if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+  #           version="${GITHUB_REF##*/}"
+  #         else
+  #           version="$(date '+%Y.%-m.%-d')-dev.${GITHUB_RUN_NUMBER}"
+  #           is_dev="1"
+  #         fi
 
-          jq --arg version "${version}" '.version = $version' src/npmpackage/package.json > package.json.tmp
-          mv package.json.tmp src/npmpackage/package.json
+  #         jq --arg version "${version}" '.version = $version' src/npmpackage/package.json > package.json.tmp
+  #         mv package.json.tmp src/npmpackage/package.json
 
-          mkdir -p src/npmpackage/build/Release
-          mv prebuilds/*-nodejs-* src/npmpackage/build/Release
-          mv prebuilds/emscripten/ocl.js src/npmpackage/build
-          cd src/npmpackage
-          npm install
-          npm run build-emscripten
-          if [ "${is_dev}" == "1" ]; then
-            npm publish --access public --tag dev
-          else
-            npm publish --access public
-          fi
-  publish-pypi:
-    name: publish to PyPi
-    needs: [
-      nodejs,
-      emscripten,
-      python,
-      cxx
-    ]
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - uses: actions/download-artifact@v3
-        with:
-          path: prebuilds
-      - name: prepare
-        shell: bash
-        run: |
-          mkdir dist
-          mv prebuilds/*-python-*/* dist
-      - name: Publish wheels to Test PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
-          repository_url: https://test.pypi.org/legacy/
-      - name: Publish wheels to PyPI
-        if: startsWith(github.ref, 'refs/tags')
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          password: ${{ secrets.PYPI_API_TOKEN }}
-  publish-github:
-    name: publish to Github
-    if: startsWith(github.ref, 'refs/tags/')
-    needs: [
-      nodejs,
-      emscripten,
-      python,
-      cxx
-    ]
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - uses: actions/download-artifact@v3
-        with:
-          path: prebuilds
-      - name: prepare
-        shell: bash
-        run: |
-          mkdir dist
-          zip -r dist/linux-cxx-x86_64.zip prebuilds/linux-cxx-x86_64
-          zip -r dist/macos-cxx-arm64.zip prebuilds/macos-cxx-arm64
-          zip -r dist/macos-cxx-x86_64.zip prebuilds/macos-cxx-x86_64
-          zip -r dist/windows-cxx-ia32.zip prebuilds/windows-cxx-ia32
-          zip -r dist/windows-cxx-x64.zip prebuilds/windows-cxx-x64
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          files: |
-            dist/*
+  #         mkdir -p src/npmpackage/build/Release
+  #         mv prebuilds/*-nodejs-* src/npmpackage/build/Release
+  #         mv prebuilds/emscripten/ocl.js src/npmpackage/build
+  #         cd src/npmpackage
+  #         npm install
+  #         npm run build-emscripten
+  #         if [ "${is_dev}" == "1" ]; then
+  #           npm publish --access public --tag dev
+  #         else
+  #           npm publish --access public
+  #         fi
+  # publish-pypi:
+  #   name: publish to PyPi
+  #   needs: [
+  #     nodejs,
+  #     emscripten,
+  #     python,
+  #     cxx
+  #   ]
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         fetch-depth: 0
+  #     - uses: actions/download-artifact@v3
+  #       with:
+  #         path: prebuilds
+  #     - name: prepare
+  #       shell: bash
+  #       run: |
+  #         mkdir dist
+  #         mv prebuilds/*-python-*/* dist
+  #     - name: Publish wheels to Test PyPI
+  #       uses: pypa/gh-action-pypi-publish@release/v1
+  #       with:
+  #         password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+  #         repository_url: https://test.pypi.org/legacy/
+  #     - name: Publish wheels to PyPI
+  #       if: startsWith(github.ref, 'refs/tags')
+  #       uses: pypa/gh-action-pypi-publish@release/v1
+  #       with:
+  #         password: ${{ secrets.PYPI_API_TOKEN }}
+  # publish-github:
+  #   name: publish to Github
+  #   if: startsWith(github.ref, 'refs/tags/')
+  #   needs: [
+  #     nodejs,
+  #     emscripten,
+  #     python,
+  #     cxx
+  #   ]
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         fetch-depth: 0
+  #     - uses: actions/download-artifact@v3
+  #       with:
+  #         path: prebuilds
+  #     - name: prepare
+  #       shell: bash
+  #       run: |
+  #         mkdir dist
+  #         zip -r dist/linux-cxx-x86_64.zip prebuilds/linux-cxx-x86_64
+  #         zip -r dist/macos-cxx-arm64.zip prebuilds/macos-cxx-arm64
+  #         zip -r dist/macos-cxx-x86_64.zip prebuilds/macos-cxx-x86_64
+  #         zip -r dist/windows-cxx-ia32.zip prebuilds/windows-cxx-ia32
+  #         zip -r dist/windows-cxx-x64.zip prebuilds/windows-cxx-x64
+  #     - name: Release
+  #       uses: softprops/action-gh-release@v1
+  #       with:
+  #         token: ${{ secrets.GITHUB_TOKEN }}
+  #         files: |
+  #           dist/*
