@@ -50,22 +50,12 @@ jobs:
             cd boost-1.87.0
             cmake \
               -D CMAKE_BUILD_TYPE=Release \
+              -D CMAKE_CONFIGURATION_TYPES=Release \
               -D BOOST_INCLUDE_LIBRARIES="math;foreach;graph" \
-              -S . \
-              -B build
-            cmake \
-              --build build \
-              --config Release \
-              --parallel 4
-            cmake \
-              --install build \
-              --config Release \
-              --prefix "/c/Program Files (x86)/Boost"
+              -S . -B build
+            cmake --build build --parallel 4
+            cmake --install build --prefix "/c/Program Files (x86)/Boost"
             cd ..
-          fi
-
-          if [ "${{ matrix.os_short }}" == "windows" ]; then
-            export IS_WINDOWS=1
           fi
 
           mkdir -p lib/ocl
@@ -73,28 +63,17 @@ jobs:
             -D CMAKE_BUILD_TYPE=Release \
             -D CMAKE_CONFIGURATION_TYPES=Release \
             -D BUILD_CXX_LIB="ON" \
-            -S . \
-            -B build
-          cmake \
-            --build build \
-            --config Release \
-            --parallel 4
-          cmake \
-            --install build \
-            --config Release \
-            --prefix $(pwd)/lib/ocl \
-            --verbose
+            -S . -B build
+          cmake --build build --parallel 4
+          cmake --install build --prefix $(pwd)/lib/ocl --verbose
 
           cd examples/cpp/test
           cmake \
             -D CMAKE_BUILD_TYPE=Release \
+            -D CMAKE_CONFIGURATION_TYPES=Release \
             -D CMAKE_PREFIX_PATH="$(pwd)/../../../lib/ocl" \
-            -S . \
-            -B build
-          cmake \
-            --build build \
-            --config Release \
-            --parallel 4
+            -S . -B build
+          cmake --build build --parallel 4
           cd ./build
           ./test_example
   # nodejs:
@@ -185,35 +164,21 @@ jobs:
             cd boost-1.87.0
             cmake \
               -D CMAKE_BUILD_TYPE=Release \
+              -D CMAKE_CONFIGURATION_TYPES=Release \
               -D BOOST_INCLUDE_LIBRARIES="python;math;foreach;graph" \
               -D BOOST_ENABLE_PYTHON="ON" \
-              -S . \
-              -B build
-            cmake \
-              --build build \
-              --config Release \
-              --parallel 4
-            cmake \
-              --install build \
-              --config Release \
-              --prefix "/c/Program Files (x86)/Boost"
+              -S . -B build
+            cmake --build build --parallel 4
+            cmake --install build --prefix "/c/Program Files (x86)/Boost"
             cd ..
           fi
 
-          if [ "${{ matrix.os_short }}" == "windows" ]; then
-            export IS_WINDOWS=1
-          fi
           cmake \
             -D CMAKE_BUILD_TYPE=Release \
+            -D CMAKE_CONFIGURATION_TYPES=Release \
             -D BUILD_PY_LIB=ON \
-            -S . \
-            -B build
-          cmake \
-            --build build \
-            --config Release \
-            --parallel 4
-          cmake \
-            --install build \
-            --config Release
+            -S . -B build
+          cmake --build build --parallel 4
+          cmake --install build
           cd examples/python
           python test.py
