@@ -30,6 +30,9 @@ if(WIN32)
 endif()
 
 # some options to set what is built:
+option(BUILD_BOOST
+  "Download and build boost library? " OFF)
+
 option(BUILD_CXX_LIB
   "Build/install the pure c++ ocl library? " OFF)
 
@@ -81,15 +84,15 @@ include(gcc_version.cmake)
 # #include'ing the boost graph-library creates deprecated warnings
 # thus we use now use -Wno-deprecated here.
 #
-if(UNIX)
-  if(GCC_4_6)
-    message(STATUS "setting gcc options: -Wall -Werror -Wno-deprecated -pedantic-errors")
-    add_definitions(-Wall  -Wno-deprecated -Werror -pedantic-errors)
-  else()
-    message(STATUS "setting gcc options: -Wall  -Wno-deprecated -pedantic-errors")
-    add_definitions(-Wall  -Wno-deprecated -pedantic-errors)
-  endif()
-endif()
+# if(UNIX)
+#   if(GCC_4_6)
+#     message(STATUS "setting gcc options: -Wall -Werror -Wno-deprecated -pedantic-errors")
+#     add_definitions(-Wall  -Wno-deprecated -Werror -pedantic-errors)
+#   else()
+#     message(STATUS "setting gcc options: -Wall  -Wno-deprecated -pedantic-errors")
+#     add_definitions(-Wall  -Wno-deprecated -pedantic-errors)
+#   endif()
+# endif()
 
 include(CheckIPOSupported)
 check_ipo_supported(RESULT got_ipo_support)
@@ -131,7 +134,28 @@ if(BUILD_EMSCRIPTEN_LIB)
   set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE BOTH)
   set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE BOTH)
 endif()
-find_package(Boost CONFIG REQUIRED)
+
+if(BUILD_BOOST)
+  include(FetchContent)
+
+  if(BUILD_PY_LIB)
+    set(BOOST_ENABLE_PYTHON ON)
+    set(BOOST_INCLUDE_LIBRARIES math foreach graph python)
+  else()
+    set(BOOST_INCLUDE_LIBRARIES math foreach graph)
+  endif()
+
+  FetchContent_Declare(
+    Boost
+    URL https://github.com/boostorg/boost/releases/download/boost-1.87.0/boost-1.87.0-cmake.tar.xz
+    URL_MD5 d55d43218e81ca3d0fc14436b7665bf1
+    DOWNLOAD_EXTRACT_TIMESTAMP ON
+  )
+  FetchContent_MakeAvailable(Boost)
+else()
+  find_package(Boost CONFIG REQUIRED)
+endif()
+
 if(BUILD_EMSCRIPTEN_LIB)
   set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
   set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)

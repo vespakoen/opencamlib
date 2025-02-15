@@ -18,4 +18,4 @@ add_library(
     STATIC
     ${OCL_DROPCUTTER_SRC}
 )
-target_link_libraries(ocl_dropcutter PUBLIC Boost::boost)
+target_link_libraries(ocl_dropcutter PUBLIC Boost::foreach Boost::graph)

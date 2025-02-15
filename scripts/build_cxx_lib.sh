@@ -6,6 +6,7 @@ build_type="Release"
 config_type="Release"
 
 cmake \
+    -D BUILD_BOOST=ON \
     -D BUILD_CXX_LIB=ON \
     -D CMAKE_BUILD_TYPE="${build_type}" \
     -D CMAKE_CONFIGURATION_TYPES="${config_type}" \

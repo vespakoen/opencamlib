@@ -16,4 +16,4 @@ add_library(
     STATIC
     ${OCL_CUTTER_SRC}
 )
-target_link_libraries(ocl_cutters PUBLIC Boost::boost)
+target_link_libraries(ocl_cutters PUBLIC Boost::math Boost::graph)

@@ -89,7 +89,6 @@ jobs:
           echo "${version}" > src/git-tag.txt
 
           if [ "${{ matrix.docker_image }}" != "" ]; then
-            echo "./scripts/install_boost.sh --headers-only" >> run.sh
             echo "./scripts/build_cxx_lib.sh /work/dist" >> run.sh
             chmod +x ./run.sh
             docker run \
@@ -101,7 +100,6 @@ jobs:
               --rm "${{ matrix.docker_image }}" \
               ./run.sh
           else
-            ./scripts/install_boost.sh --headers-only
             ./scripts/build_cxx_lib.sh $(pwd)/dist
           fi
       - uses: actions/upload-artifact@v4

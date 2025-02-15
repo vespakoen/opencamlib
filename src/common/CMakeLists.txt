@@ -18,4 +18,4 @@ add_library(
     STATIC
     ${OCL_COMMON_SRC}
 )
-target_link_libraries(ocl_common PUBLIC Boost::boost)
+target_link_libraries(ocl_common PUBLIC Boost::math)
