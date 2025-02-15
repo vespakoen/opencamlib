@@ -138,6 +138,7 @@ endif()
 if(BUILD_BOOST)
   include(FetchContent)
 
+  set(BOOST_SKIP_INSTALL_RULES OFF)
   set(BOOST_RUNTIME_LINK static)
   if(BUILD_PY_LIB)
     set(BOOST_ENABLE_PYTHON ON)
