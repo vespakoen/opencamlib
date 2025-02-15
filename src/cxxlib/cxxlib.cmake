@@ -45,7 +45,7 @@ if(WIN32 AND MSVC) # AND CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS
 endif()
 
 # link with Boost and optionally with OpenMP
-target_link_libraries(ocl PUBLIC Boost::boost)
+target_link_libraries(ocl PUBLIC Boost::math Boost::foreach Boost::graph)
 if(USE_OPENMP)
   target_link_libraries(ocl PRIVATE OpenMP::OpenMP_CXX)
 endif()
