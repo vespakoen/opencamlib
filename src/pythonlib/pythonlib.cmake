@@ -1,16 +1,16 @@
 # saner defaults
-if(NOT DEFINED Python_FIND_STRATEGY)
-  set(Python_FIND_STRATEGY LOCATION)
-endif()
-if(NOT DEFINED Python_FIND_REGISTRY)
-  set(Python_FIND_REGISTRY NEVER)
-endif()
-if(NOT DEFINED Python_FIND_FRAMEWORK)
-  set(Python_FIND_FRAMEWORK NEVER)
-endif()
-if(NOT DEFINED Python_FIND_VIRTUALENV)
-  set(Python_FIND_VIRTUALENV FIRST)
-endif()
+# if(NOT DEFINED Python_FIND_STRATEGY)
+#   set(Python_FIND_STRATEGY LOCATION)
+# endif()
+# if(NOT DEFINED Python_FIND_REGISTRY)
+#   set(Python_FIND_REGISTRY NEVER)
+# endif()
+# if(NOT DEFINED Python_FIND_FRAMEWORK)
+#   set(Python_FIND_FRAMEWORK NEVER)
+# endif()
+# if(NOT DEFINED Python_FIND_VIRTUALENV)
+#   set(Python_FIND_VIRTUALENV FIRST)
+# endif()
 
 if (CMAKE_VERSION VERSION_LESS 3.18)
   set(DEV_MODULE Development)
@@ -25,7 +25,7 @@ if(Python_FOUND)
   message(STATUS "Python executable: " ${Python_EXECUTABLE})
   message(STATUS "Python (arch-dependant) module destination: " ${Python_SITEARCH})
 endif()
-find_package(Boost CONFIG COMPONENTS python${Python_VERSION_MAJOR}${Python_VERSION_MINOR} REQUIRED)
+# find_package(Boost CONFIG COMPONENTS python REQUIRED)
 
 # include dirs
 include_directories(${PROJECT_SOURCE_DIR}/cutters)
@@ -54,7 +54,9 @@ PRIVATE
   ocl_cutters
   ocl_geo
   ocl_algo
-  Boost::boost
+  Boost::math
+  Boost::graph
+  Boost::foreach
   Boost::python${Python_VERSION_MAJOR}${Python_VERSION_MINOR}
 )
 
